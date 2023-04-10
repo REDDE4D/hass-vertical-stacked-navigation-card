@@ -14,6 +14,11 @@ A custom Home Assistant card for displaying a vertical stacked navigation with o
 
 ## Installation
 
+### HACS
+
+1. Add the Repository to Custom repositories
+2. Seach for `Vertical Stacked Navigation Card` and install.
+
 ### Manual
 
 1. Download the `vertical-stacked-navigation-card.js` file and place it in your `config/www` folder.
@@ -22,8 +27,6 @@ A custom Home Assistant card for displaying a vertical stacked navigation with o
 ```yaml
 /local/vertical-stacked-navigation-card.js
 ```
-
-### HACS
 
 ## Usage
 

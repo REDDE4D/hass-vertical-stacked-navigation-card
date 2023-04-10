@@ -1,3 +1,9 @@
+import {
+  LitElement,
+  html,
+  css,
+} from "https://unpkg.com/lit-element@2.0.1/lit-element.js?module";
+
 class VerticalStackedNavCard extends HTMLElement {
   set hass(hass) {
     if (!this.content) {
@@ -61,10 +67,9 @@ class VerticalStackedNavCard extends HTMLElement {
                 color: #fff;
                 border-radius: 5px;
                 position: relative;
-                ${this.config.global_styles || ""}
               }
               .nav-item:hover {
-                background-color: rgba(255, 255, 255, 0.3);
+                background-color: ${this.config.hover_color || "rgba(255, 255, 255, 0.3)"};
               }
               .nav-item.active {
                 background-color: ${this.config.active_color || "rgba(55, 55, 255, 0.5)"};
@@ -84,29 +89,14 @@ class VerticalStackedNavCard extends HTMLElement {
                 margin-left: 15px;
               }
               .nav-item.sub-item:hover {
-                background-color: rgba(255, 255, 255, 0.3);
+                background-color: ${this.config.hover_color || "rgba(255, 255, 255, 0.3)"};
               }
               .nav-item.sub-item.active {
                 background-color: ${this.config.sub_active_color || "rgba(55, 55, 255, 0.5)"};
               }
-              ${this.config.nav_items.map((item, index) => `
-                .nav-item.nav-item-${index} {
-                  ${item.style || ""}
-                }
-              `).join("")}
-              ${this.config.nav_items.reduce((styles, item, index) => {
-        if (item.sub_nav_items) {
-          styles.push(...item.sub_nav_items.map((subItem, subIndex) => `
-                            .nav-item.nav-item-${index}.sub-item.sub-item-${subIndex} {
-                              ${subItem.style || ""}
-                            }
-                          `));
-        }
-        return styles;
-      }, []).join("")}
-                  </style>
-                  ${navItems}
-                `;
+          </style>
+          ${navItems}
+        `;
 
       this.config.nav_items.forEach((item, index) => {
         if (item.sub_nav_items) {
@@ -139,3 +129,46 @@ class VerticalStackedNavCard extends HTMLElement {
     return this.config.nav_items.length * 1;
   }
 }
+
+customElements.define("vertical-stacked-navigation-card", VerticalStackedNavCard);
+
+class VerticalStackedNavCardEditor extends LitElement {
+  static get properties() {
+    return {
+      _config: {},
+    };
+  }
+
+  setConfig(config) {
+    this._config = config;
+  }
+
+  configChanged(newConfig) {
+    const event = new Event("config-changed", {
+      bubbles: true,
+      composed: true,
+    });
+    event.detail = { config: newConfig };
+    this.dispatchEvent(event);
+  }
+
+  render() {
+    // You can add your visual editor elements here, for example:
+    return html`
+      <div>
+        Visual editor for the vertical-stacked-navigation-card.
+      </div>
+    `;
+  }
+}
+
+customElements.define("vertical-stacked-navigation-card-editor", VerticalStackedNavCardEditor);
+
+window.customCards = window.customCards || [];
+window.customCards.push({
+  type: "vertical-stacked-navigation-card",
+  name: "Vertical Stacked Nav Card",
+  preview: false,
+  description: "A custom card with a vertical stacked navigation",
+  editor: "vertical-stacked-navigation-card-editor",
+});

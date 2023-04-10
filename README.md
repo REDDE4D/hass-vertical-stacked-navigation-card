@@ -16,11 +16,11 @@ A custom Home Assistant card for displaying a vertical stacked navigation with o
 
 ### Manual
 
-1. Download the `vertical-stacked-nav-card.js` file and place it in your `config/www` folder.
+1. Download the `vertical-stacked-navigation-card.js` file and place it in your `config/www` folder.
 2. Add a reference to `vertical-stacked-nav-card.js` in `Settings -> Dashboard`:
 
 ```yaml
-/local/vertical-stacked-nav-card.js
+/local/vertical-stacked-navigation-card.js
 ```
 
 ### HACS
@@ -30,7 +30,7 @@ A custom Home Assistant card for displaying a vertical stacked navigation with o
 To use the card, add the following configuration to a manual card:
 
 ```yaml
-type: "custom:vertical-stacked-nav-card"
+type: "custom:vertical-stacked-navigation-card"
 nav_name: "My Custom Navigation"
 nav_items:
   - icon: "mdi:home"
@@ -56,7 +56,7 @@ nav_items:
 
 | **Name**         | **Type** | **Default** | **Description**                                                                           |
 | ---------------- | -------- | ----------- | ----------------------------------------------------------------------------------------- |
-| type             | string   |             | The custom card type, should always be `'custom:vertical-stacked-nav-card'`               |
+| type             | string   |             | The custom card type, should always be `'custom:vertical-stacked-navigation-card'`        |
 | nav_name         | string   |             | The name of the card header. Set it to 'none' to hide the header                          |
 | nav_items        | list     |             | An list of Items representing each navigation item                                        |
 | hover_color      | string   | (optional)  | Default hover color for nav items. (Defaults to 'rgba(255, 255, 255, 0.3)')               |
@@ -91,7 +91,7 @@ Each sub-navigation item in the `sub_nav_items` list should contain the followin
 Here is an example configuration for a vertical stacked navigation card:
 
 ```yaml
-type: custom:vertical-stacked-nav-card
+type: custom:vertical-stacked-navigation-card
 nav_name: My Custom Navigation
 nav_items:
   - icon: mdi:home

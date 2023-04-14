@@ -62,11 +62,11 @@ class VerticalStackedNavCard extends HTMLElement {
                 display: flex;
                 align-items: center;
                 text-decoration: none;
-                background-color: ${this.config.custom_styles.colors.background.main || "rgba(255, 255, 255, 0.2)"};
+                background-color: ${this.config?.custom_styles?.colors?.background?.main || "rgba(255, 255, 255, 0.2)"};
                 padding: 10px;
-                color: ${this.config.custom_styles.colors.text.main || "#fff"};
+                color: ${this.config?.custom_styles?.colors?.text?.main || "#fff"};
                 border-radius: 5px;
-                font-size: ${this.config.custom_styles.font_size.main || "20px"};
+                font-size: ${this.config?.custom_styles?.font_size?.main || "20px"};
                 position: relative;
               }
               .nav-item.unfolded {
@@ -76,13 +76,13 @@ class VerticalStackedNavCard extends HTMLElement {
                 display: flex;
                 align-items: center;
                 text-decoration: none;
-                color: ${this.config.custom_styles.colors.text.sub || "#fff"};
+                color: ${this.config?.custom_styles?.colors?.text?.sub || "#fff"};
                 position: relative;
                 padding: 5px;
-                background-color: ${this.config.custom_styles.colors.background.sub || "rgba(255, 255, 255, 0.2)"};
+                background-color: ${this.config?.custom_styles?.colors?.background?.sub || "rgba(255, 255, 255, 0.2)"};
                 margin-left: 15px;
                 padding-left: 25px;
-                font-size: ${this.config.custom_styles.font_size.sub || "14px"};
+                font-size: ${this.config?.custom_styles?.font_size?.sub || "14px"};
                 border-radius: none;
               }
               .sub-item:first-child {
@@ -94,10 +94,10 @@ class VerticalStackedNavCard extends HTMLElement {
                 border-bottom-right-radius: 3px;
               }
               .nav-item:hover {
-                background-color: ${this.config.custom_styles.colors.hover.main || "rgba(255, 255, 255, 0.3)"};
+                background-color: ${this.config?.custom_styles?.colors?.hover?.main || "rgba(255, 255, 255, 0.3)"};
               }
               .nav-item.active {
-                background-color: ${this.config.custom_styles.colors.active.main || "rgba(55, 55, 255, 0.5)"};
+                background-color: ${this.config?.custom_styles?.colors?.active?.main || "rgba(55, 55, 255, 0.5)"};
               }
               .subnav-indicator {
                 position: absolute;
@@ -113,10 +113,10 @@ class VerticalStackedNavCard extends HTMLElement {
                 display: block;
               }
               .sub-item:hover {
-                background-color: ${this.config.custom_styles.colors.hover.sub || "rgba(255, 255, 255, 0.3)"};
+                background-color: ${this.config?.custom_styles?.colors?.hover?.sub || "rgba(255, 255, 255, 0.3)"};
               }
               .sub-item.active {
-                background-color: ${this.config.custom_styles.colors.active.sub || "rgba(55, 55, 255, 0.5)"};
+                background-color: ${this.config?.custom_styles?.colors?.active?.sub || "rgba(55, 55, 255, 0.5)"};
               }
           </style>
           ${navItems}

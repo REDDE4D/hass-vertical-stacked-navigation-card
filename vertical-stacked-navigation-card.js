@@ -225,5 +225,7 @@ window.customCards.push({
   name: "Vertical Stacked Nav Card",
   preview: false,
   description: "A custom card with a vertical stacked navigation",
-  editor: "vertical-stacked-navigation-card-editor",
+  editorConfig: {
+    type: "vertical-stacked-navigation-card-editor",
+  },
 });

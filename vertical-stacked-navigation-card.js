@@ -190,91 +190,31 @@ class VerticalStackedNavCardEditor extends LitElement {
     this.dispatchEvent(event);
   }
 
+  _valueChanged(event) {
+    if (!this._config || event.target.value === "") {
+      return;
+    }
+
+    const newConfig = {
+      ...this._config,
+      nav_name: event.target.value,
+    };
+
+    this.configChanged(newConfig);
+  }
+
   render() {
     return html`
       <div>
-        <h3>Navigation Name</h3>
+        <label for="nav_name">Nav Name</label>
         <input
-          type="text"
-          .value="${this._config.nav_name || ''}"
-          @input="${(e) => this.updateConfig('nav_name', e.target.value)}"
+          id="nav_name"
+          .value="${this._config.nav_name || ""}"
+          @change="${this._valueChanged}"
         />
-        <h3>Navigation Items</h3>
-        ${this._config.nav_items.map((item, index) => this.renderNavItem(index, item))}
-        <button @click="${() => this.addNavItem()}">Add Nav Item</button>
       </div>
     `;
   }
-
-  renderNavItem(index, item) {
-    return html`
-      <div style="border: 1px solid #ccc; margin-bottom: 8px; padding: 8px;">
-        <h4>Nav Item ${index + 1}</h4>
-        <label>
-          Name:
-          <input
-            type="text"
-            .value="${item.name || ''}"
-            @input="${(e) => this.updateNavItem(index, 'name', e.target.value)}"
-          />
-        </label>
-        <br />
-        <label>
-          Icon:
-          <input
-            type="text"
-            .value="${item.icon || ''}"
-            @input="${(e) => this.updateNavItem(index, 'icon', e.target.value)}"
-          />
-        </label>
-        <br />
-        <label>
-          Destination:
-          <input
-            type="text"
-            .value="${item.destination || ''}"
-            @input="${(e) => this.updateNavItem(index, 'destination', e.target.value)}"
-          />
-        </label>
-        <br />
-        <label>
-          Active:
-          <input
-            type="checkbox"
-            ?checked="${item.active}"
-            @change="${(e) => this.updateNavItem(index, 'active', e.target.checked)}"
-          />
-        </label>
-        <br />
-        <button @click="${() => this.removeNavItem(index)}">Remove Nav Item</button>
-      </div>
-    `;
-  }
-  
-  updateConfig(prop, value) {
-    const newConfig = { ...this._config, [prop]: value };
-    this.configChanged(newConfig);
-  }
-  
-  updateNavItem(index, prop, value) {
-    const newConfig = { ...this._config };
-    newConfig.nav_items = [...newConfig.nav_items];
-    newConfig.nav_items[index] = { ...newConfig.nav_items[index], [prop]: value };
-    this.configChanged(newConfig);
-  }
-  
-  addNavItem() {
-    const newConfig = { ...this._config };
-    newConfig.nav_items = [...newConfig.nav_items, { name: '', icon: '', destination: '', active: false }];
-    this.configChanged(newConfig);
-  }
-  
-  removeNavItem(index) {
-    const newConfig = { ...this._config };
-    newConfig.nav_items = newConfig.nav_items.filter((_, i) => i !== index);
-    this.configChanged(newConfig);
-  }
-  
 }
 
 customElements.define("vertical-stacked-navigation-card-editor", VerticalStackedNavCardEditor);

@@ -16,7 +16,7 @@ A custom Home Assistant card for displaying a vertical stacked navigation with o
 
 ### HACS
 
-1. Add the Repository to Custom repositories
+1. Add the Repository (`https://github.com/REDDE4D/hass-vertical-stacked-navigation-card.git`) to Custom repositories
 2. Seach for `Vertical Stacked Navigation Card` and install.
 
 ### Manual
@@ -62,14 +62,10 @@ nav_items:
 | type             | string   |             | The custom card type, should always be `'custom:vertical-stacked-navigation-card'`        |
 | nav_name         | string   |             | The name of the card header. Set it to 'none' to hide the header                          |
 | nav_items        | list     |             | An list of Items representing each navigation item                                        |
-| hover_color      | string   | (optional)  | Default hover color for nav items. (Defaults to 'rgba(255, 255, 255, 0.3)')               |
-| active_color     | string   | (optional)  | Default background color for active nav items. (Defaults to 'rgba(55, 55, 255, 0.5)')     |
-| sub_active_color | string   | (optional)  | Default background color for active sub-nav items. (Defaults to 'rgba(55, 55, 255, 0.5)') |
+| custom_styles    | map      | (optional)  | Override default styles. See custom_styles                                                |
 
 ### Navigation Items
-
 Each navigation item in the nav_items list should contain the following properties:
-
 | **Name**      | **Type** | **Default** | **Description**                                          |
 | ------------- | -------- | ----------- | -------------------------------------------------------- |
 | icon          | string   |             | The icon for the nav item (e.g., 'mdi:home')             |
@@ -79,15 +75,29 @@ Each navigation item in the nav_items list should contain the following properti
 | sub_nav_items | list     | (optional)  | An list of items representing each sub-navigation item   |
 
 ### Sub-navigation Items
-
 Each sub-navigation item in the `sub_nav_items` list should contain the following properties:
-
 | **Name**    | **Type** | **Default** | **Description**                                              |
 | ----------- | -------- | ----------- | ------------------------------------------------------------ |
 | icon        | string   |             | The Icon for the sub-nav item (e.g., 'mdi:sofa')             |
 | name        | string   |             | The name of the nav item                                     |
 | destination | string   |             | The destination URL for the nav item                         |
 | active      | bool     | false       | Set to `true` if the sub-nav item should be marked as active |
+
+### custom_styles
+See Example for details
+| **Name**    | **Type** | **Default**             | **Description**                                              |
+| ----------- | -------- | ----------------------- | ------------------------------------------------------------ |
+| colors      | map      |                         | The Icon for the sub-nav item (e.g., 'mdi:sofa')             |
+| font_size   | map      | `main: 20px, sub: 14px` | The name of the nav item                                     |
+
+#### custom_styles:colors
+| **Name**    | **Type** | **Default**                 | **Description**                                              |
+| ----------- | -------- | --------------------------- | ------------------------------------------------------------ |
+| hover       | map      | `rgba(255, 255, 255, 0.3)`  | The hover-color of main or sub item                          |
+| active      | map      | `rgba(55, 55, 255, 0.5)`    | The active-color of main or sub item                         |
+| text        | map      | `#fff`                      | The text-color of main or sub item                           |
+| background  | map      | `rgba(255, 255, 255, 0.2)`  | The background-color of main or sub item                     |
+
 
 ## Example
 
@@ -114,9 +124,23 @@ nav_items:
   - icon: mdi:thermostat
     name: Climate
     destination: /lovelace/climate
-hover_color: rgba(15,105,55,0.8)
-active_color: rgba(55,55,255,0.8)
-sub_active_color: rgba(222,25,246,0.8)
+custom_styles:
+  colors:
+    hover: 
+      main: rgba(15,105,55,0.8)
+      sub: rgba(15,105,55,0.8)
+    active:
+      main: rgba(55,55,255,0.8)
+      sub: rgba(55,55,255,0.8)
+    text:
+      main: #fff
+      sub: #fff
+    background:
+      main: rgba(0,0,0,0.5)
+      sub: rgba(0,0,0,0.5)
+  font_size:
+    main: 25px
+    sub: 14px
 ```
 
 This example will create a navigation card with a custom header, three navigation items (one with sub-navigation items), and custom styles for the active states and hover state.

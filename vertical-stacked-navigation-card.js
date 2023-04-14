@@ -48,9 +48,6 @@ class VerticalStackedNavCard extends HTMLElement {
 
       this.content.innerHTML = `
           <style>
-              ha-card {
-                background-color: #333333;
-              }
               ha-card header {
                 padding-top: 10px;
                 padding-left: 16px;

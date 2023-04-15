@@ -60,16 +60,12 @@ export class VerticalStackedNavCard extends LitElement {
     const navItems = this.config.nav_items.map((item, index) => {
         const isActive = item.active ? "active" : "";
         const subNavItems = item.sub_nav_items
-          ? item.sub_nav_items
-            .map(
-              (subItem) => `
+          ? item.sub_nav_items.map((subItem) => html`
                 <a href="${subItem.destination}" class="sub-item ${subItem.active ? "active" : ""} nav-item-${index}">
                   <ha-icon icon="${subItem.icon}"></ha-icon>
                   <span>${subItem.name}</span>
                 </a>
-              `
-            )
-            .join("")
+              `)
           : "";
         return html`
             <div class="nav-item-container">
@@ -103,10 +99,11 @@ export class VerticalStackedNavCard extends LitElement {
               </header>
             `
           : ""}
-        <div class="card-content">${navItems}</div> <!-- Update this line -->
+        <div class="card-content">${navItems}</div>
       </ha-card>
     `;
-  }
+}
+
 
   protected updated(_changedProperties: PropertyValues): void {
     if (!this.content) {

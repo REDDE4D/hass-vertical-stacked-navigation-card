@@ -1,22 +1,25 @@
 import { LitElement, html, TemplateResult, CSSResult, PropertyValues } from "lit-element";
+import { fireEvent } from "custom-card-helpers";
 import styles from "./styles";
+import { VerticalStackedNavCardEditor } from "./editor";
 
-interface NavItem {
+export interface NavItem {
   name: string;
   icon: string;
   destination: string;
   active?: boolean;
   sub_nav_items?: SubNavItem[];
+  unfolded?: boolean;
 }
 
-interface SubNavItem {
+export interface SubNavItem {
   name: string;
   icon: string;
   destination: string;
   active?: boolean;
 }
 
-interface CustomStyles {
+export interface CustomStyles {
   colors?: {
     background?: {
       main?: string;
@@ -41,7 +44,7 @@ interface CustomStyles {
   };
 }
 
-interface Config {
+export interface Config {
   nav_name?: string;
   nav_items: NavItem[];
   custom_styles?: CustomStyles;
@@ -76,10 +79,10 @@ export class VerticalStackedNavCard extends LitElement {
                 <span>${item.name}</span>
                 ${item.sub_nav_items ? html`<ha-icon icon="mdi:chevron-down" class="subnav-indicator"></ha-icon>` : ""}
                 </a>
-                <div class="sub-nav-items">${subNavItems}</div>
+                <div class="sub-nav-items" style="display: ${item.unfolded ? 'block' : 'none'}">${subNavItems}</div>
             </div>
         `;
-    });
+      });
 
     return html`
       <ha-card>
@@ -138,6 +141,22 @@ export class VerticalStackedNavCard extends LitElement {
     }
   }
 
+  private handleConfigChanged(ev: Event): void {
+    this.configChanged(ev as CustomEvent);
+  }
+
+  public setConfigEditor(editor: HTMLElement): void {
+    (editor as any).setConfig(this.config);
+    editor.addEventListener("config-changed", this.handleConfigChanged.bind(this));
+  }
+  
+  private configChanged(ev: CustomEvent): void {
+    const { config } = ev.detail;
+    this.setConfig(config);
+    fireEvent(this, "config-changed", { config });
+  }
+  
+
   public setConfig(config: Config): void {
     if (!config.nav_items) {
       throw new Error("You need to define nav_items");
@@ -169,3 +188,10 @@ export class VerticalStackedNavCard extends LitElement {
   }  
 }
 customElements.define("vertical-stacked-navigation-card", VerticalStackedNavCard);
+(window as any).customCards = (window as any).customCards || [];
+(window as any).customCards.push({
+  type: "vertical-stacked-navigation-card",
+  name: "Vertical Stacked Navigation Card",
+  preview: false,
+  description: "Adds a customizable Vertical Stacked Navigation.",
+});

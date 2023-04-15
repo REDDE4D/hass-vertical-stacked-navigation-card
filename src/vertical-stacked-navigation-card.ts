@@ -57,6 +57,34 @@ export class VerticalStackedNavCard extends LitElement {
   }
 
   protected render(): TemplateResult {
+    const navItems = this.config.nav_items.map((item, index) => {
+        const isActive = item.active ? "active" : "";
+        const subNavItems = item.sub_nav_items
+          ? item.sub_nav_items
+            .map(
+              (subItem) => `
+                <a href="${subItem.destination}" class="sub-item ${subItem.active ? "active" : ""} nav-item-${index}">
+                  <ha-icon icon="${subItem.icon}"></ha-icon>
+                  <span>${subItem.name}</span>
+                </a>
+              `
+            )
+            .join("")
+          : "";
+        return html`
+            <div class="nav-item-container">
+                <a href="${item.sub_nav_items ? "#" : item.destination}"
+                class="nav-item ${isActive} nav-item-${index}"
+                @click=${item.sub_nav_items ? this._toggleSubnav : null}>
+                <ha-icon icon="${item.icon}"></ha-icon>
+                <span>${item.name}</span>
+                ${item.sub_nav_items ? html`<ha-icon icon="mdi:chevron-down" class="subnav-indicator"></ha-icon>` : ""}
+                </a>
+                <div class="sub-nav-items">${subNavItems}</div>
+            </div>
+        `;
+    });
+
     return html`
       <ha-card>
         ${this.config.nav_name !== "none"
@@ -75,7 +103,7 @@ export class VerticalStackedNavCard extends LitElement {
               </header>
             `
           : ""}
-        <div class="card-content"></div>
+        <div class="card-content">${navItems}</div> <!-- Update this line -->
       </ha-card>
     `;
   }
@@ -110,50 +138,6 @@ export class VerticalStackedNavCard extends LitElement {
           this.style.setProperty("--sub-font-size", font_size.sub ?? null);
         }
       }
-
-      const navItems = this.config.nav_items.map((item, index) => {
-        const isActive = item.active ? "active" : "";
-        const subNavItems = item.sub_nav_items
-          ? item.sub_nav_items
-            .map(
-              (subItem) => `
-                <a href="${subItem.destination}" class="sub-item ${subItem.active ? "active" : ""} nav-item-${index}">
-                  <ha-icon icon="${subItem.icon}"></ha-icon>
-                  <span>${subItem.name}</span>
-                </a>
-              `
-            )
-            .join("")
-          : "";
-
-        return `
-          <div class="nav-item-container">
-            <a href="${item.sub_nav_items ? "#" : item.destination}" class="nav-item ${isActive} nav-item-${index}">
-              <ha-icon icon="${item.icon}"></ha-icon>
-              <span>${item.name}</span>
-              ${item.sub_nav_items ? '<ha-icon icon="mdi:chevron-down" class="subnav-indicator"></ha-icon>' : ""}
-            </a>
-            <div class="sub-nav-items">${subNavItems}</div>
-          </div>
-        `;
-      }).join("");
-
-      this.content.innerHTML = navItems;
-
-      this.config.nav_items.forEach((item, index) => {
-        if (item.sub_nav_items) {
-          const navItem = this.querySelector(`.nav-item.nav-item-${index}`) as HTMLElement;
-          navItem.addEventListener("click", this._toggleSubnav.bind(this));
-      
-          const hasActiveSubItem = item.sub_nav_items.some((subItem) => subItem.active);
-          if (hasActiveSubItem) {
-            const subNav = navItem.nextElementSibling as HTMLElement;
-            subNav.style.display = "block";
-            navItem.classList.add("unfolded");
-          }
-        }
-      });
-      
     }
   }
 

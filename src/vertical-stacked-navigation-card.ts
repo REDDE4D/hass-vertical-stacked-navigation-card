@@ -170,6 +170,7 @@ export class VerticalStackedNavCard extends LitElement {
 
   private _toggleSubnav(event: MouseEvent): void {
     event.preventDefault();
+    console.log('Toggle subnav triggered'); // Add this line
     const navItemContainer = (event.target as HTMLElement).closest(".nav-item-container");
     if (!navItemContainer || !navItemContainer.querySelector(".sub-nav-items")) {
       return;

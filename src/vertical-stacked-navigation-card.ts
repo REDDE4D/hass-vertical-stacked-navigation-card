@@ -1,7 +1,6 @@
 import { LitElement, html, TemplateResult, CSSResult, PropertyValues } from "lit-element";
 import { fireEvent } from "custom-card-helpers";
 import styles from "./styles";
-import { VerticalStackedNavCardEditor } from "./editor";
 
 export interface NavItem {
   name: string;
@@ -58,6 +57,10 @@ export class VerticalStackedNavCard extends LitElement {
   static get styles(): CSSResult {
     return styles;
   }
+
+  getCardEditor() {
+    return document.createElement("vertical-stacked-nav-card-editor");
+  }  
 
   protected render(): TemplateResult {
     const navItems = this.config.nav_items.map((item, index) => {
@@ -187,11 +190,3 @@ export class VerticalStackedNavCard extends LitElement {
     }
   }  
 }
-customElements.define("vertical-stacked-navigation-card", VerticalStackedNavCard);
-(window as any).customCards = (window as any).customCards || [];
-(window as any).customCards.push({
-  type: "vertical-stacked-navigation-card",
-  name: "Vertical Stacked Navigation Card",
-  preview: false,
-  description: "Adds a customizable Vertical Stacked Navigation.",
-});

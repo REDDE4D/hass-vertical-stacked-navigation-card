@@ -1,0 +1,15 @@
+{
+    "compilerOptions": {
+      "module": "ESNext",
+      "target": "ES2019",
+      "lib": ["DOM", "ES2019"],
+      "strict": true,
+      "moduleResolution": "node",
+      "esModuleInterop": true,
+      "outDir": "dist",
+      "experimentalDecorators": true,
+      "emitDecoratorMetadata": true
+    },
+    "include": ["src/**/*.ts"]
+  }
+  

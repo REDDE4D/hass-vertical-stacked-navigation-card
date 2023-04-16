@@ -1,189 +1,26 @@
 /**
  * @license
- * Copyright (c) 2017 The Polymer Project Authors. All rights reserved.
- * This code may only be used under the BSD style license found at
- * http://polymer.github.io/LICENSE.txt
- * The complete set of authors may be found at
- * http://polymer.github.io/AUTHORS.txt
- * The complete set of contributors may be found at
- * http://polymer.github.io/CONTRIBUTORS.txt
- * Code distributed by Google as part of the polymer project is also
- * subject to an additional IP rights grant found at
- * http://polymer.github.io/PATENTS.txt
+ * Copyright 2019 Google LLC
+ * SPDX-License-Identifier: BSD-3-Clause
  */
-const t=new WeakMap,e=e=>"function"==typeof e&&t.has(e),s="undefined"!=typeof window&&null!=window.customElements&&void 0!==window.customElements.polyfillWrapFlushCallback,i=(t,e,s=null)=>{for(;e!==s;){const s=e.nextSibling;t.removeChild(e),e=s}},n={},o={},r=`{{lit-${String(Math.random()).slice(2)}}}`,a=`\x3c!--${r}--\x3e`,l=new RegExp(`${r}|${a}`),c="$lit$";class d{constructor(t,e){this.parts=[],this.element=e;const s=[],i=[],n=document.createTreeWalker(e.content,133,null,!1);let o=0,a=-1,d=0;const{strings:u,values:{length:v}}=t;for(;d<v;){const t=n.nextNode();if(null!==t){if(a++,1===t.nodeType){if(t.hasAttributes()){const e=t.attributes,{length:s}=e;let i=0;for(let t=0;t<s;t++)h(e[t].name,c)&&i++;for(;i-- >0;){const e=u[d],s=m.exec(e)[2],i=s.toLowerCase()+c,n=t.getAttribute(i);t.removeAttribute(i);const o=n.split(l);this.parts.push({type:"attribute",index:a,name:s,strings:o}),d+=o.length-1}}"TEMPLATE"===t.tagName&&(i.push(t),n.currentNode=t.content)}else if(3===t.nodeType){const e=t.data;if(e.indexOf(r)>=0){const i=t.parentNode,n=e.split(l),o=n.length-1;for(let e=0;e<o;e++){let s,o=n[e];if(""===o)s=p();else{const t=m.exec(o);null!==t&&h(t[2],c)&&(o=o.slice(0,t.index)+t[1]+t[2].slice(0,-c.length)+t[3]),s=document.createTextNode(o)}i.insertBefore(s,t),this.parts.push({type:"node",index:++a})}""===n[o]?(i.insertBefore(p(),t),s.push(t)):t.data=n[o],d+=o}}else if(8===t.nodeType)if(t.data===r){const e=t.parentNode;null!==t.previousSibling&&a!==o||(a++,e.insertBefore(p(),t)),o=a,this.parts.push({type:"node",index:a}),null===t.nextSibling?t.data="":(s.push(t),a--),d++}else{let e=-1;for(;-1!==(e=t.data.indexOf(r,e+1));)this.parts.push({type:"node",index:-1}),d++}}else n.currentNode=i.pop()}for(const t of s)t.parentNode.removeChild(t)}}const h=(t,e)=>{const s=t.length-e.length;return s>=0&&t.slice(s)===e},u=t=>-1!==t.index,p=()=>document.createComment(""),m=/([ \x09\x0a\x0c\x0d])([^\0-\x1F\x7F-\x9F "'>=/]+)([ \x09\x0a\x0c\x0d]*=[ \x09\x0a\x0c\x0d]*(?:[^ \x09\x0a\x0c\x0d"'`<>=]*|"[^"]*|'[^']*))$/;
+const t=window,e=t.ShadowRoot&&(void 0===t.ShadyCSS||t.ShadyCSS.nativeShadow)&&"adoptedStyleSheets"in Document.prototype&&"replace"in CSSStyleSheet.prototype,i=Symbol(),n=new WeakMap;class s{constructor(t,e,n){if(this._$cssResult$=!0,n!==i)throw Error("CSSResult is not constructable. Use `unsafeCSS` or `css` instead.");this.cssText=t,this.t=e}get styleSheet(){let t=this.o;const i=this.t;if(e&&void 0===t){const e=void 0!==i&&1===i.length;e&&(t=n.get(i)),void 0===t&&((this.o=t=new CSSStyleSheet).replaceSync(this.cssText),e&&n.set(i,t))}return t}toString(){return this.cssText}}const o=(t,...e)=>{const n=1===t.length?t[0]:e.reduce(((e,i,n)=>e+(t=>{if(!0===t._$cssResult$)return t.cssText;if("number"==typeof t)return t;throw Error("Value passed to 'css' function must be a 'css' function result: "+t+". Use 'unsafeCSS' to pass non-literal values, but take care to ensure page security.")})(i)+t[n+1]),t[0]);return new s(n,t,i)},r=e?t=>t:t=>t instanceof CSSStyleSheet?(t=>{let e="";for(const i of t.cssRules)e+=i.cssText;return(t=>new s("string"==typeof t?t:t+"",void 0,i))(e)})(t):t
 /**
  * @license
- * Copyright (c) 2017 The Polymer Project Authors. All rights reserved.
- * This code may only be used under the BSD style license found at
- * http://polymer.github.io/LICENSE.txt
- * The complete set of authors may be found at
- * http://polymer.github.io/AUTHORS.txt
- * The complete set of contributors may be found at
- * http://polymer.github.io/CONTRIBUTORS.txt
- * Code distributed by Google as part of the polymer project is also
- * subject to an additional IP rights grant found at
- * http://polymer.github.io/PATENTS.txt
+ * Copyright 2017 Google LLC
+ * SPDX-License-Identifier: BSD-3-Clause
+ */;var a;const l=window,c=l.trustedTypes,d=c?c.emptyScript:"",h=l.reactiveElementPolyfillSupport,u={toAttribute(t,e){switch(e){case Boolean:t=t?d:null;break;case Object:case Array:t=null==t?t:JSON.stringify(t)}return t},fromAttribute(t,e){let i=t;switch(e){case Boolean:i=null!==t;break;case Number:i=null===t?null:Number(t);break;case Object:case Array:try{i=JSON.parse(t)}catch(t){i=null}}return i}},v=(t,e)=>e!==t&&(e==e||t==t),p={attribute:!0,type:String,converter:u,reflect:!1,hasChanged:v};class m extends HTMLElement{constructor(){super(),this._$Ei=new Map,this.isUpdatePending=!1,this.hasUpdated=!1,this._$El=null,this.u()}static addInitializer(t){var e;this.finalize(),(null!==(e=this.h)&&void 0!==e?e:this.h=[]).push(t)}static get observedAttributes(){this.finalize();const t=[];return this.elementProperties.forEach(((e,i)=>{const n=this._$Ep(i,e);void 0!==n&&(this._$Ev.set(n,i),t.push(n))})),t}static createProperty(t,e=p){if(e.state&&(e.attribute=!1),this.finalize(),this.elementProperties.set(t,e),!e.noAccessor&&!this.prototype.hasOwnProperty(t)){const i="symbol"==typeof t?Symbol():"__"+t,n=this.getPropertyDescriptor(t,i,e);void 0!==n&&Object.defineProperty(this.prototype,t,n)}}static getPropertyDescriptor(t,e,i){return{get(){return this[e]},set(n){const s=this[t];this[e]=n,this.requestUpdate(t,s,i)},configurable:!0,enumerable:!0}}static getPropertyOptions(t){return this.elementProperties.get(t)||p}static finalize(){if(this.hasOwnProperty("finalized"))return!1;this.finalized=!0;const t=Object.getPrototypeOf(this);if(t.finalize(),void 0!==t.h&&(this.h=[...t.h]),this.elementProperties=new Map(t.elementProperties),this._$Ev=new Map,this.hasOwnProperty("properties")){const t=this.properties,e=[...Object.getOwnPropertyNames(t),...Object.getOwnPropertySymbols(t)];for(const i of e)this.createProperty(i,t[i])}return this.elementStyles=this.finalizeStyles(this.styles),!0}static finalizeStyles(t){const e=[];if(Array.isArray(t)){const i=new Set(t.flat(1/0).reverse());for(const t of i)e.unshift(r(t))}else void 0!==t&&e.push(r(t));return e}static _$Ep(t,e){const i=e.attribute;return!1===i?void 0:"string"==typeof i?i:"string"==typeof t?t.toLowerCase():void 0}u(){var t;this._$E_=new Promise((t=>this.enableUpdating=t)),this._$AL=new Map,this._$Eg(),this.requestUpdate(),null===(t=this.constructor.h)||void 0===t||t.forEach((t=>t(this)))}addController(t){var e,i;(null!==(e=this._$ES)&&void 0!==e?e:this._$ES=[]).push(t),void 0!==this.renderRoot&&this.isConnected&&(null===(i=t.hostConnected)||void 0===i||i.call(t))}removeController(t){var e;null===(e=this._$ES)||void 0===e||e.splice(this._$ES.indexOf(t)>>>0,1)}_$Eg(){this.constructor.elementProperties.forEach(((t,e)=>{this.hasOwnProperty(e)&&(this._$Ei.set(e,this[e]),delete this[e])}))}createRenderRoot(){var i;const n=null!==(i=this.shadowRoot)&&void 0!==i?i:this.attachShadow(this.constructor.shadowRootOptions);return((i,n)=>{e?i.adoptedStyleSheets=n.map((t=>t instanceof CSSStyleSheet?t:t.styleSheet)):n.forEach((e=>{const n=document.createElement("style"),s=t.litNonce;void 0!==s&&n.setAttribute("nonce",s),n.textContent=e.cssText,i.appendChild(n)}))})(n,this.constructor.elementStyles),n}connectedCallback(){var t;void 0===this.renderRoot&&(this.renderRoot=this.createRenderRoot()),this.enableUpdating(!0),null===(t=this._$ES)||void 0===t||t.forEach((t=>{var e;return null===(e=t.hostConnected)||void 0===e?void 0:e.call(t)}))}enableUpdating(t){}disconnectedCallback(){var t;null===(t=this._$ES)||void 0===t||t.forEach((t=>{var e;return null===(e=t.hostDisconnected)||void 0===e?void 0:e.call(t)}))}attributeChangedCallback(t,e,i){this._$AK(t,i)}_$EO(t,e,i=p){var n;const s=this.constructor._$Ep(t,i);if(void 0!==s&&!0===i.reflect){const o=(void 0!==(null===(n=i.converter)||void 0===n?void 0:n.toAttribute)?i.converter:u).toAttribute(e,i.type);this._$El=t,null==o?this.removeAttribute(s):this.setAttribute(s,o),this._$El=null}}_$AK(t,e){var i;const n=this.constructor,s=n._$Ev.get(t);if(void 0!==s&&this._$El!==s){const t=n.getPropertyOptions(s),o="function"==typeof t.converter?{fromAttribute:t.converter}:void 0!==(null===(i=t.converter)||void 0===i?void 0:i.fromAttribute)?t.converter:u;this._$El=s,this[s]=o.fromAttribute(e,t.type),this._$El=null}}requestUpdate(t,e,i){let n=!0;void 0!==t&&(((i=i||this.constructor.getPropertyOptions(t)).hasChanged||v)(this[t],e)?(this._$AL.has(t)||this._$AL.set(t,e),!0===i.reflect&&this._$El!==t&&(void 0===this._$EC&&(this._$EC=new Map),this._$EC.set(t,i))):n=!1),!this.isUpdatePending&&n&&(this._$E_=this._$Ej())}async _$Ej(){this.isUpdatePending=!0;try{await this._$E_}catch(t){Promise.reject(t)}const t=this.scheduleUpdate();return null!=t&&await t,!this.isUpdatePending}scheduleUpdate(){return this.performUpdate()}performUpdate(){var t;if(!this.isUpdatePending)return;this.hasUpdated,this._$Ei&&(this._$Ei.forEach(((t,e)=>this[e]=t)),this._$Ei=void 0);let e=!1;const i=this._$AL;try{e=this.shouldUpdate(i),e?(this.willUpdate(i),null===(t=this._$ES)||void 0===t||t.forEach((t=>{var e;return null===(e=t.hostUpdate)||void 0===e?void 0:e.call(t)})),this.update(i)):this._$Ek()}catch(t){throw e=!1,this._$Ek(),t}e&&this._$AE(i)}willUpdate(t){}_$AE(t){var e;null===(e=this._$ES)||void 0===e||e.forEach((t=>{var e;return null===(e=t.hostUpdated)||void 0===e?void 0:e.call(t)})),this.hasUpdated||(this.hasUpdated=!0,this.firstUpdated(t)),this.updated(t)}_$Ek(){this._$AL=new Map,this.isUpdatePending=!1}get updateComplete(){return this.getUpdateComplete()}getUpdateComplete(){return this._$E_}shouldUpdate(t){return!0}update(t){void 0!==this._$EC&&(this._$EC.forEach(((t,e)=>this._$EO(e,this[e],t))),this._$EC=void 0),this._$Ek()}updated(t){}firstUpdated(t){}}
+/**
+ * @license
+ * Copyright 2017 Google LLC
+ * SPDX-License-Identifier: BSD-3-Clause
  */
-class v{constructor(t,e,s){this.__parts=[],this.template=t,this.processor=e,this.options=s}update(t){let e=0;for(const s of this.__parts)void 0!==s&&s.setValue(t[e]),e++;for(const t of this.__parts)void 0!==t&&t.commit()}_clone(){const t=s?this.template.element.content.cloneNode(!0):document.importNode(this.template.element.content,!0),e=[],i=this.template.parts,n=document.createTreeWalker(t,133,null,!1);let o,r=0,a=0,l=n.nextNode();for(;r<i.length;)if(o=i[r],u(o)){for(;a<o.index;)a++,"TEMPLATE"===l.nodeName&&(e.push(l),n.currentNode=l.content),null===(l=n.nextNode())&&(n.currentNode=e.pop(),l=n.nextNode());if("node"===o.type){const t=this.processor.handleTextExpression(this.options);t.insertAfterNode(l.previousSibling),this.__parts.push(t)}else this.__parts.push(...this.processor.handleAttributeExpressions(l,o.name,o.strings,this.options));r++}else this.__parts.push(void 0),r++;return s&&(document.adoptNode(t),customElements.upgrade(t)),t}}
+var g;m.finalized=!0,m.elementProperties=new Map,m.elementStyles=[],m.shadowRootOptions={mode:"open"},null==h||h({ReactiveElement:m}),(null!==(a=l.reactiveElementVersions)&&void 0!==a?a:l.reactiveElementVersions=[]).push("1.6.1");const f=window,_=f.trustedTypes,b=_?_.createPolicy("lit-html",{createHTML:t=>t}):void 0,$="$lit$",y=`lit$${(Math.random()+"").slice(9)}$`,A="?"+y,x=`<${A}>`,E=document,w=()=>E.createComment(""),S=t=>null===t||"object"!=typeof t&&"function"!=typeof t,C=Array.isArray,k="[ \t\n\f\r]",N=/<(?:(!--|\/[^a-zA-Z])|(\/?[a-zA-Z][^>\s]*)|(\/?$))/g,P=/-->/g,O=/>/g,I=RegExp(`>|${k}(?:([^\\s"'>=/]+)(${k}*=${k}*(?:[^ \t\n\f\r"'\`<>=]|("|')|))|$)`,"g"),U=/'/g,H=/"/g,R=/^(?:script|style|textarea|title)$/i,j=(t=>(e,...i)=>({_$litType$:t,strings:e,values:i}))(1),T=Symbol.for("lit-noChange"),z=Symbol.for("lit-nothing"),M=new WeakMap,D=E.createTreeWalker(E,129,null,!1),L=(t,e)=>{const i=t.length-1,n=[];let s,o=2===e?"<svg>":"",r=N;for(let e=0;e<i;e++){const i=t[e];let a,l,c=-1,d=0;for(;d<i.length&&(r.lastIndex=d,l=r.exec(i),null!==l);)d=r.lastIndex,r===N?"!--"===l[1]?r=P:void 0!==l[1]?r=O:void 0!==l[2]?(R.test(l[2])&&(s=RegExp("</"+l[2],"g")),r=I):void 0!==l[3]&&(r=I):r===I?">"===l[0]?(r=null!=s?s:N,c=-1):void 0===l[1]?c=-2:(c=r.lastIndex-l[2].length,a=l[1],r=void 0===l[3]?I:'"'===l[3]?H:U):r===H||r===U?r=I:r===P||r===O?r=N:(r=I,s=void 0);const h=r===I&&t[e+1].startsWith("/>")?" ":"";o+=r===N?i+x:c>=0?(n.push(a),i.slice(0,c)+$+i.slice(c)+y+h):i+y+(-2===c?(n.push(void 0),e):h)}const a=o+(t[i]||"<?>")+(2===e?"</svg>":"");if(!Array.isArray(t)||!t.hasOwnProperty("raw"))throw Error("invalid template strings array");return[void 0!==b?b.createHTML(a):a,n]};class B{constructor({strings:t,_$litType$:e},i){let n;this.parts=[];let s=0,o=0;const r=t.length-1,a=this.parts,[l,c]=L(t,e);if(this.el=B.createElement(l,i),D.currentNode=this.el.content,2===e){const t=this.el.content,e=t.firstChild;e.remove(),t.append(...e.childNodes)}for(;null!==(n=D.nextNode())&&a.length<r;){if(1===n.nodeType){if(n.hasAttributes()){const t=[];for(const e of n.getAttributeNames())if(e.endsWith($)||e.startsWith(y)){const i=c[o++];if(t.push(e),void 0!==i){const t=n.getAttribute(i.toLowerCase()+$).split(y),e=/([.?@])?(.*)/.exec(i);a.push({type:1,index:s,name:e[2],strings:t,ctor:"."===e[1]?J:"?"===e[1]?Z:"@"===e[1]?F:K})}else a.push({type:6,index:s})}for(const e of t)n.removeAttribute(e)}if(R.test(n.tagName)){const t=n.textContent.split(y),e=t.length-1;if(e>0){n.textContent=_?_.emptyScript:"";for(let i=0;i<e;i++)n.append(t[i],w()),D.nextNode(),a.push({type:2,index:++s});n.append(t[e],w())}}}else if(8===n.nodeType)if(n.data===A)a.push({type:2,index:s});else{let t=-1;for(;-1!==(t=n.data.indexOf(y,t+1));)a.push({type:7,index:s}),t+=y.length-1}s++}}static createElement(t,e){const i=E.createElement("template");return i.innerHTML=t,i}}function V(t,e,i=t,n){var s,o,r,a;if(e===T)return e;let l=void 0!==n?null===(s=i._$Co)||void 0===s?void 0:s[n]:i._$Cl;const c=S(e)?void 0:e._$litDirective$;return(null==l?void 0:l.constructor)!==c&&(null===(o=null==l?void 0:l._$AO)||void 0===o||o.call(l,!1),void 0===c?l=void 0:(l=new c(t),l._$AT(t,i,n)),void 0!==n?(null!==(r=(a=i)._$Co)&&void 0!==r?r:a._$Co=[])[n]=l:i._$Cl=l),void 0!==l&&(e=V(t,l._$AS(t,e.values),l,n)),e}class q{constructor(t,e){this._$AV=[],this._$AN=void 0,this._$AD=t,this._$AM=e}get parentNode(){return this._$AM.parentNode}get _$AU(){return this._$AM._$AU}u(t){var e;const{el:{content:i},parts:n}=this._$AD,s=(null!==(e=null==t?void 0:t.creationScope)&&void 0!==e?e:E).importNode(i,!0);D.currentNode=s;let o=D.nextNode(),r=0,a=0,l=n[0];for(;void 0!==l;){if(r===l.index){let e;2===l.type?e=new W(o,o.nextSibling,this,t):1===l.type?e=new l.ctor(o,l.name,l.strings,this,t):6===l.type&&(e=new G(o,this,t)),this._$AV.push(e),l=n[++a]}r!==(null==l?void 0:l.index)&&(o=D.nextNode(),r++)}return s}v(t){let e=0;for(const i of this._$AV)void 0!==i&&(void 0!==i.strings?(i._$AI(t,i,e),e+=i.strings.length-2):i._$AI(t[e])),e++}}class W{constructor(t,e,i,n){var s;this.type=2,this._$AH=z,this._$AN=void 0,this._$AA=t,this._$AB=e,this._$AM=i,this.options=n,this._$Cp=null===(s=null==n?void 0:n.isConnected)||void 0===s||s}get _$AU(){var t,e;return null!==(e=null===(t=this._$AM)||void 0===t?void 0:t._$AU)&&void 0!==e?e:this._$Cp}get parentNode(){let t=this._$AA.parentNode;const e=this._$AM;return void 0!==e&&11===(null==t?void 0:t.nodeType)&&(t=e.parentNode),t}get startNode(){return this._$AA}get endNode(){return this._$AB}_$AI(t,e=this){t=V(this,t,e),S(t)?t===z||null==t||""===t?(this._$AH!==z&&this._$AR(),this._$AH=z):t!==this._$AH&&t!==T&&this._(t):void 0!==t._$litType$?this.g(t):void 0!==t.nodeType?this.$(t):(t=>C(t)||"function"==typeof(null==t?void 0:t[Symbol.iterator]))(t)?this.T(t):this._(t)}k(t){return this._$AA.parentNode.insertBefore(t,this._$AB)}$(t){this._$AH!==t&&(this._$AR(),this._$AH=this.k(t))}_(t){this._$AH!==z&&S(this._$AH)?this._$AA.nextSibling.data=t:this.$(E.createTextNode(t)),this._$AH=t}g(t){var e;const{values:i,_$litType$:n}=t,s="number"==typeof n?this._$AC(t):(void 0===n.el&&(n.el=B.createElement(n.h,this.options)),n);if((null===(e=this._$AH)||void 0===e?void 0:e._$AD)===s)this._$AH.v(i);else{const t=new q(s,this),e=t.u(this.options);t.v(i),this.$(e),this._$AH=t}}_$AC(t){let e=M.get(t.strings);return void 0===e&&M.set(t.strings,e=new B(t)),e}T(t){C(this._$AH)||(this._$AH=[],this._$AR());const e=this._$AH;let i,n=0;for(const s of t)n===e.length?e.push(i=new W(this.k(w()),this.k(w()),this,this.options)):i=e[n],i._$AI(s),n++;n<e.length&&(this._$AR(i&&i._$AB.nextSibling,n),e.length=n)}_$AR(t=this._$AA.nextSibling,e){var i;for(null===(i=this._$AP)||void 0===i||i.call(this,!1,!0,e);t&&t!==this._$AB;){const e=t.nextSibling;t.remove(),t=e}}setConnected(t){var e;void 0===this._$AM&&(this._$Cp=t,null===(e=this._$AP)||void 0===e||e.call(this,t))}}class K{constructor(t,e,i,n,s){this.type=1,this._$AH=z,this._$AN=void 0,this.element=t,this.name=e,this._$AM=n,this.options=s,i.length>2||""!==i[0]||""!==i[1]?(this._$AH=Array(i.length-1).fill(new String),this.strings=i):this._$AH=z}get tagName(){return this.element.tagName}get _$AU(){return this._$AM._$AU}_$AI(t,e=this,i,n){const s=this.strings;let o=!1;if(void 0===s)t=V(this,t,e,0),o=!S(t)||t!==this._$AH&&t!==T,o&&(this._$AH=t);else{const n=t;let r,a;for(t=s[0],r=0;r<s.length-1;r++)a=V(this,n[i+r],e,r),a===T&&(a=this._$AH[r]),o||(o=!S(a)||a!==this._$AH[r]),a===z?t=z:t!==z&&(t+=(null!=a?a:"")+s[r+1]),this._$AH[r]=a}o&&!n&&this.j(t)}j(t){t===z?this.element.removeAttribute(this.name):this.element.setAttribute(this.name,null!=t?t:"")}}class J extends K{constructor(){super(...arguments),this.type=3}j(t){this.element[this.name]=t===z?void 0:t}}const Y=_?_.emptyScript:"";class Z extends K{constructor(){super(...arguments),this.type=4}j(t){t&&t!==z?this.element.setAttribute(this.name,Y):this.element.removeAttribute(this.name)}}class F extends K{constructor(t,e,i,n,s){super(t,e,i,n,s),this.type=5}_$AI(t,e=this){var i;if((t=null!==(i=V(this,t,e,0))&&void 0!==i?i:z)===T)return;const n=this._$AH,s=t===z&&n!==z||t.capture!==n.capture||t.once!==n.once||t.passive!==n.passive,o=t!==z&&(n===z||s);s&&this.element.removeEventListener(this.name,this,n),o&&this.element.addEventListener(this.name,this,t),this._$AH=t}handleEvent(t){var e,i;"function"==typeof this._$AH?this._$AH.call(null!==(i=null===(e=this.options)||void 0===e?void 0:e.host)&&void 0!==i?i:this.element,t):this._$AH.handleEvent(t)}}class G{constructor(t,e,i){this.element=t,this.type=6,this._$AN=void 0,this._$AM=e,this.options=i}get _$AU(){return this._$AM._$AU}_$AI(t){V(this,t)}}const Q=f.litHtmlPolyfillSupport;null==Q||Q(B,W),(null!==(g=f.litHtmlVersions)&&void 0!==g?g:f.litHtmlVersions=[]).push("2.7.2");
 /**
  * @license
- * Copyright (c) 2017 The Polymer Project Authors. All rights reserved.
- * This code may only be used under the BSD style license found at
- * http://polymer.github.io/LICENSE.txt
- * The complete set of authors may be found at
- * http://polymer.github.io/AUTHORS.txt
- * The complete set of contributors may be found at
- * http://polymer.github.io/CONTRIBUTORS.txt
- * Code distributed by Google as part of the polymer project is also
- * subject to an additional IP rights grant found at
- * http://polymer.github.io/PATENTS.txt
- */const f=window.trustedTypes&&trustedTypes.createPolicy("lit-html",{createHTML:t=>t}),_=` ${r} `;class g{constructor(t,e,s,i){this.strings=t,this.values=e,this.type=s,this.processor=i}getHTML(){const t=this.strings.length-1;let e="",s=!1;for(let i=0;i<t;i++){const t=this.strings[i],n=t.lastIndexOf("\x3c!--");s=(n>-1||s)&&-1===t.indexOf("--\x3e",n+1);const o=m.exec(t);e+=null===o?t+(s?_:a):t.substr(0,o.index)+o[1]+o[2]+c+o[3]+r}return e+=this.strings[t],e}getTemplateElement(){const t=document.createElement("template");let e=this.getHTML();return void 0!==f&&(e=f.createHTML(e)),t.innerHTML=e,t}}
-/**
- * @license
- * Copyright (c) 2017 The Polymer Project Authors. All rights reserved.
- * This code may only be used under the BSD style license found at
- * http://polymer.github.io/LICENSE.txt
- * The complete set of authors may be found at
- * http://polymer.github.io/AUTHORS.txt
- * The complete set of contributors may be found at
- * http://polymer.github.io/CONTRIBUTORS.txt
- * Code distributed by Google as part of the polymer project is also
- * subject to an additional IP rights grant found at
- * http://polymer.github.io/PATENTS.txt
- */const y=t=>null===t||!("object"==typeof t||"function"==typeof t),b=t=>Array.isArray(t)||!(!t||!t[Symbol.iterator]);class S{constructor(t,e,s){this.dirty=!0,this.element=t,this.name=e,this.strings=s,this.parts=[];for(let t=0;t<s.length-1;t++)this.parts[t]=this._createPart()}_createPart(){return new w(this)}_getValue(){const t=this.strings,e=t.length-1,s=this.parts;if(1===e&&""===t[0]&&""===t[1]){const t=s[0].value;if("symbol"==typeof t)return String(t);if("string"==typeof t||!b(t))return t}let i="";for(let n=0;n<e;n++){i+=t[n];const e=s[n];if(void 0!==e){const t=e.value;if(y(t)||!b(t))i+="string"==typeof t?t:String(t);else for(const e of t)i+="string"==typeof e?e:String(e)}}return i+=t[e],i}commit(){this.dirty&&(this.dirty=!1,this.element.setAttribute(this.name,this._getValue()))}}class w{constructor(t){this.value=void 0,this.committer=t}setValue(t){t===n||y(t)&&t===this.value||(this.value=t,e(t)||(this.committer.dirty=!0))}commit(){for(;e(this.value);){const t=this.value;this.value=n,t(this)}this.value!==n&&this.committer.commit()}}class x{constructor(t){this.value=void 0,this.__pendingValue=void 0,this.options=t}appendInto(t){this.startNode=t.appendChild(p()),this.endNode=t.appendChild(p())}insertAfterNode(t){this.startNode=t,this.endNode=t.nextSibling}appendIntoPart(t){t.__insert(this.startNode=p()),t.__insert(this.endNode=p())}insertAfterPart(t){t.__insert(this.startNode=p()),this.endNode=t.endNode,t.endNode=this.startNode}setValue(t){this.__pendingValue=t}commit(){if(null===this.startNode.parentNode)return;for(;e(this.__pendingValue);){const t=this.__pendingValue;this.__pendingValue=n,t(this)}const t=this.__pendingValue;t!==n&&(y(t)?t!==this.value&&this.__commitText(t):t instanceof g?this.__commitTemplateResult(t):t instanceof Node?this.__commitNode(t):b(t)?this.__commitIterable(t):t===o?(this.value=o,this.clear()):this.__commitText(t))}__insert(t){this.endNode.parentNode.insertBefore(t,this.endNode)}__commitNode(t){this.value!==t&&(this.clear(),this.__insert(t),this.value=t)}__commitText(t){const e=this.startNode.nextSibling,s="string"==typeof(t=null==t?"":t)?t:String(t);e===this.endNode.previousSibling&&3===e.nodeType?e.data=s:this.__commitNode(document.createTextNode(s)),this.value=t}__commitTemplateResult(t){const e=this.options.templateFactory(t);if(this.value instanceof v&&this.value.template===e)this.value.update(t.values);else{const s=new v(e,t.processor,this.options),i=s._clone();s.update(t.values),this.__commitNode(i),this.value=s}}__commitIterable(t){Array.isArray(this.value)||(this.value=[],this.clear());const e=this.value;let s,i=0;for(const n of t)s=e[i],void 0===s&&(s=new x(this.options),e.push(s),0===i?s.appendIntoPart(this):s.insertAfterPart(e[i-1])),s.setValue(n),s.commit(),i++;i<e.length&&(e.length=i,this.clear(s&&s.endNode))}clear(t=this.startNode){i(this.startNode.parentNode,t.nextSibling,this.endNode)}}class P{constructor(t,e,s){if(this.value=void 0,this.__pendingValue=void 0,2!==s.length||""!==s[0]||""!==s[1])throw new Error("Boolean attributes can only contain a single expression");this.element=t,this.name=e,this.strings=s}setValue(t){this.__pendingValue=t}commit(){for(;e(this.__pendingValue);){const t=this.__pendingValue;this.__pendingValue=n,t(this)}if(this.__pendingValue===n)return;const t=!!this.__pendingValue;this.value!==t&&(t?this.element.setAttribute(this.name,""):this.element.removeAttribute(this.name),this.value=t),this.__pendingValue=n}}class N extends S{constructor(t,e,s){super(t,e,s),this.single=2===s.length&&""===s[0]&&""===s[1]}_createPart(){return new C(this)}_getValue(){return this.single?this.parts[0].value:super._getValue()}commit(){this.dirty&&(this.dirty=!1,this.element[this.name]=this._getValue())}}class C extends w{}let k=!1;(()=>{try{const t={get capture(){return k=!0,!1}};window.addEventListener("test",t,t),window.removeEventListener("test",t,t)}catch(t){}})();class E{constructor(t,e,s){this.value=void 0,this.__pendingValue=void 0,this.element=t,this.eventName=e,this.eventContext=s,this.__boundHandleEvent=t=>this.handleEvent(t)}setValue(t){this.__pendingValue=t}commit(){for(;e(this.__pendingValue);){const t=this.__pendingValue;this.__pendingValue=n,t(this)}if(this.__pendingValue===n)return;const t=this.__pendingValue,s=this.value,i=null==t||null!=s&&(t.capture!==s.capture||t.once!==s.once||t.passive!==s.passive),o=null!=t&&(null==s||i);i&&this.element.removeEventListener(this.eventName,this.__boundHandleEvent,this.__options),o&&(this.__options=T(t),this.element.addEventListener(this.eventName,this.__boundHandleEvent,this.__options)),this.value=t,this.__pendingValue=n}handleEvent(t){"function"==typeof this.value?this.value.call(this.eventContext||this.element,t):this.value.handleEvent(t)}}const T=t=>t&&(k?{capture:t.capture,passive:t.passive,once:t.once}:t.capture)
-/**
- * @license
- * Copyright (c) 2017 The Polymer Project Authors. All rights reserved.
- * This code may only be used under the BSD style license found at
- * http://polymer.github.io/LICENSE.txt
- * The complete set of authors may be found at
- * http://polymer.github.io/AUTHORS.txt
- * The complete set of contributors may be found at
- * http://polymer.github.io/CONTRIBUTORS.txt
- * Code distributed by Google as part of the polymer project is also
- * subject to an additional IP rights grant found at
- * http://polymer.github.io/PATENTS.txt
- */;const A=new class{handleAttributeExpressions(t,e,s,i){const n=e[0];if("."===n){return new N(t,e.slice(1),s).parts}if("@"===n)return[new E(t,e.slice(1),i.eventContext)];if("?"===n)return[new P(t,e.slice(1),s)];return new S(t,e,s).parts}handleTextExpression(t){return new x(t)}};
-/**
- * @license
- * Copyright (c) 2017 The Polymer Project Authors. All rights reserved.
- * This code may only be used under the BSD style license found at
- * http://polymer.github.io/LICENSE.txt
- * The complete set of authors may be found at
- * http://polymer.github.io/AUTHORS.txt
- * The complete set of contributors may be found at
- * http://polymer.github.io/CONTRIBUTORS.txt
- * Code distributed by Google as part of the polymer project is also
- * subject to an additional IP rights grant found at
- * http://polymer.github.io/PATENTS.txt
- */function V(t){let e=$.get(t.type);void 0===e&&(e={stringsArray:new WeakMap,keyString:new Map},$.set(t.type,e));let s=e.stringsArray.get(t.strings);if(void 0!==s)return s;const i=t.strings.join(r);return s=e.keyString.get(i),void 0===s&&(s=new d(t,t.getTemplateElement()),e.keyString.set(i,s)),e.stringsArray.set(t.strings,s),s}const $=new Map,O=new WeakMap;
-/**
- * @license
- * Copyright (c) 2017 The Polymer Project Authors. All rights reserved.
- * This code may only be used under the BSD style license found at
- * http://polymer.github.io/LICENSE.txt
- * The complete set of authors may be found at
- * http://polymer.github.io/AUTHORS.txt
- * The complete set of contributors may be found at
- * http://polymer.github.io/CONTRIBUTORS.txt
- * Code distributed by Google as part of the polymer project is also
- * subject to an additional IP rights grant found at
- * http://polymer.github.io/PATENTS.txt
+ * Copyright 2017 Google LLC
+ * SPDX-License-Identifier: BSD-3-Clause
  */
-/**
- * @license
- * Copyright (c) 2017 The Polymer Project Authors. All rights reserved.
- * This code may only be used under the BSD style license found at
- * http://polymer.github.io/LICENSE.txt
- * The complete set of authors may be found at
- * http://polymer.github.io/AUTHORS.txt
- * The complete set of contributors may be found at
- * http://polymer.github.io/CONTRIBUTORS.txt
- * Code distributed by Google as part of the polymer project is also
- * subject to an additional IP rights grant found at
- * http://polymer.github.io/PATENTS.txt
- */
-"undefined"!=typeof window&&(window.litHtmlVersions||(window.litHtmlVersions=[])).push("1.4.1");const R=(t,...e)=>new g(t,e,"html",A)
-/**
- * @license
- * Copyright (c) 2017 The Polymer Project Authors. All rights reserved.
- * This code may only be used under the BSD style license found at
- * http://polymer.github.io/LICENSE.txt
- * The complete set of authors may be found at
- * http://polymer.github.io/AUTHORS.txt
- * The complete set of contributors may be found at
- * http://polymer.github.io/CONTRIBUTORS.txt
- * Code distributed by Google as part of the polymer project is also
- * subject to an additional IP rights grant found at
- * http://polymer.github.io/PATENTS.txt
- */;function z(t,e){const{element:{content:s},parts:i}=t,n=document.createTreeWalker(s,133,null,!1);let o=I(i),r=i[o],a=-1,l=0;const c=[];let d=null;for(;n.nextNode();){a++;const t=n.currentNode;for(t.previousSibling===d&&(d=null),e.has(t)&&(c.push(t),null===d&&(d=t)),null!==d&&l++;void 0!==r&&r.index===a;)r.index=null!==d?-1:r.index-l,o=I(i,o),r=i[o]}c.forEach((t=>t.parentNode.removeChild(t)))}const j=t=>{let e=11===t.nodeType?0:1;const s=document.createTreeWalker(t,133,null,!1);for(;s.nextNode();)e++;return e},I=(t,e=-1)=>{for(let s=e+1;s<t.length;s++){const e=t[s];if(u(e))return s}return-1};
-/**
- * @license
- * Copyright (c) 2017 The Polymer Project Authors. All rights reserved.
- * This code may only be used under the BSD style license found at
- * http://polymer.github.io/LICENSE.txt
- * The complete set of authors may be found at
- * http://polymer.github.io/AUTHORS.txt
- * The complete set of contributors may be found at
- * http://polymer.github.io/CONTRIBUTORS.txt
- * Code distributed by Google as part of the polymer project is also
- * subject to an additional IP rights grant found at
- * http://polymer.github.io/PATENTS.txt
- */
-const M=(t,e)=>`${t}--${e}`;let U=!0;void 0===window.ShadyCSS?U=!1:void 0===window.ShadyCSS.prepareTemplateDom&&(console.warn("Incompatible ShadyCSS version detected. Please update to at least @webcomponents/webcomponentsjs@2.0.2 and @webcomponents/shadycss@1.3.1."),U=!1);const q=t=>e=>{const s=M(e.type,t);let i=$.get(s);void 0===i&&(i={stringsArray:new WeakMap,keyString:new Map},$.set(s,i));let n=i.stringsArray.get(e.strings);if(void 0!==n)return n;const o=e.strings.join(r);if(n=i.keyString.get(o),void 0===n){const s=e.getTemplateElement();U&&window.ShadyCSS.prepareTemplateDom(s,t),n=new d(e,s),i.keyString.set(o,n)}return i.stringsArray.set(e.strings,n),n},L=["html","svg"],F=new Set,H=(t,e,s)=>{F.add(t);const i=s?s.element:document.createElement("template"),n=e.querySelectorAll("style"),{length:o}=n;if(0===o)return void window.ShadyCSS.prepareTemplateStyles(i,t);const r=document.createElement("style");for(let t=0;t<o;t++){const e=n[t];e.parentNode.removeChild(e),r.textContent+=e.textContent}(t=>{L.forEach((e=>{const s=$.get(M(e,t));void 0!==s&&s.keyString.forEach((t=>{const{element:{content:e}}=t,s=new Set;Array.from(e.querySelectorAll("style")).forEach((t=>{s.add(t)})),z(t,s)}))}))})(t);const a=i.content;s?function(t,e,s=null){const{element:{content:i},parts:n}=t;if(null==s)return void i.appendChild(e);const o=document.createTreeWalker(i,133,null,!1);let r=I(n),a=0,l=-1;for(;o.nextNode();)for(l++,o.currentNode===s&&(a=j(e),s.parentNode.insertBefore(e,s));-1!==r&&n[r].index===l;){if(a>0){for(;-1!==r;)n[r].index+=a,r=I(n,r);return}r=I(n,r)}}(s,r,a.firstChild):a.insertBefore(r,a.firstChild),window.ShadyCSS.prepareTemplateStyles(i,t);const l=a.querySelector("style");if(window.ShadyCSS.nativeShadow&&null!==l)e.insertBefore(l.cloneNode(!0),e.firstChild);else if(s){a.insertBefore(r,a.firstChild);const t=new Set;t.add(r),z(s,t)}};
-/**
- * @license
- * Copyright (c) 2017 The Polymer Project Authors. All rights reserved.
- * This code may only be used under the BSD style license found at
- * http://polymer.github.io/LICENSE.txt
- * The complete set of authors may be found at
- * http://polymer.github.io/AUTHORS.txt
- * The complete set of contributors may be found at
- * http://polymer.github.io/CONTRIBUTORS.txt
- * Code distributed by Google as part of the polymer project is also
- * subject to an additional IP rights grant found at
- * http://polymer.github.io/PATENTS.txt
- */
-window.JSCompiler_renameProperty=(t,e)=>t;const B={toAttribute(t,e){switch(e){case Boolean:return t?"":null;case Object:case Array:return null==t?t:JSON.stringify(t)}return t},fromAttribute(t,e){switch(e){case Boolean:return null!==t;case Number:return null===t?null:Number(t);case Object:case Array:return JSON.parse(t)}return t}},W=(t,e)=>e!==t&&(e==e||t==t),D={attribute:!0,type:String,converter:B,reflect:!1,hasChanged:W},J=Promise.resolve(!0);class Y extends HTMLElement{constructor(){super(),this._updateState=0,this._instanceProperties=void 0,this._updatePromise=J,this._hasConnectedResolver=void 0,this._changedProperties=new Map,this._reflectingProperties=void 0,this.initialize()}static get observedAttributes(){this.finalize();const t=[];return this._classProperties.forEach(((e,s)=>{const i=this._attributeNameForProperty(s,e);void 0!==i&&(this._attributeToPropertyMap.set(i,s),t.push(i))})),t}static _ensureClassProperties(){if(!this.hasOwnProperty(JSCompiler_renameProperty("_classProperties",this))){this._classProperties=new Map;const t=Object.getPrototypeOf(this)._classProperties;void 0!==t&&t.forEach(((t,e)=>this._classProperties.set(e,t)))}}static createProperty(t,e=D){if(this._ensureClassProperties(),this._classProperties.set(t,e),e.noAccessor||this.prototype.hasOwnProperty(t))return;const s="symbol"==typeof t?Symbol():`__${t}`;Object.defineProperty(this.prototype,t,{get(){return this[s]},set(e){const i=this[t];this[s]=e,this.requestUpdate(t,i)},configurable:!0,enumerable:!0})}static finalize(){if(this.hasOwnProperty(JSCompiler_renameProperty("finalized",this))&&this.finalized)return;const t=Object.getPrototypeOf(this);if("function"==typeof t.finalize&&t.finalize(),this.finalized=!0,this._ensureClassProperties(),this._attributeToPropertyMap=new Map,this.hasOwnProperty(JSCompiler_renameProperty("properties",this))){const t=this.properties,e=[...Object.getOwnPropertyNames(t),..."function"==typeof Object.getOwnPropertySymbols?Object.getOwnPropertySymbols(t):[]];for(const s of e)this.createProperty(s,t[s])}}static _attributeNameForProperty(t,e){const s=e.attribute;return!1===s?void 0:"string"==typeof s?s:"string"==typeof t?t.toLowerCase():void 0}static _valueHasChanged(t,e,s=W){return s(t,e)}static _propertyValueFromAttribute(t,e){const s=e.type,i=e.converter||B,n="function"==typeof i?i:i.fromAttribute;return n?n(t,s):t}static _propertyValueToAttribute(t,e){if(void 0===e.reflect)return;const s=e.type,i=e.converter;return(i&&i.toAttribute||B.toAttribute)(t,s)}initialize(){this._saveInstanceProperties()}_saveInstanceProperties(){this.constructor._classProperties.forEach(((t,e)=>{if(this.hasOwnProperty(e)){const t=this[e];delete this[e],this._instanceProperties||(this._instanceProperties=new Map),this._instanceProperties.set(e,t)}}))}_applyInstanceProperties(){this._instanceProperties.forEach(((t,e)=>this[e]=t)),this._instanceProperties=void 0}connectedCallback(){this._updateState=32|this._updateState,this._hasConnectedResolver?(this._hasConnectedResolver(),this._hasConnectedResolver=void 0):this.requestUpdate()}disconnectedCallback(){}attributeChangedCallback(t,e,s){e!==s&&this._attributeToProperty(t,s)}_propertyToAttribute(t,e,s=D){const i=this.constructor,n=i._attributeNameForProperty(t,s);if(void 0!==n){const t=i._propertyValueToAttribute(e,s);if(void 0===t)return;this._updateState=8|this._updateState,null==t?this.removeAttribute(n):this.setAttribute(n,t),this._updateState=-9&this._updateState}}_attributeToProperty(t,e){if(8&this._updateState)return;const s=this.constructor,i=s._attributeToPropertyMap.get(t);if(void 0!==i){const t=s._classProperties.get(i)||D;this._updateState=16|this._updateState,this[i]=s._propertyValueFromAttribute(e,t),this._updateState=-17&this._updateState}}requestUpdate(t,e){let s=!0;if(void 0!==t&&!this._changedProperties.has(t)){const i=this.constructor,n=i._classProperties.get(t)||D;i._valueHasChanged(this[t],e,n.hasChanged)?(this._changedProperties.set(t,e),!0!==n.reflect||16&this._updateState||(void 0===this._reflectingProperties&&(this._reflectingProperties=new Map),this._reflectingProperties.set(t,n))):s=!1}return!this._hasRequestedUpdate&&s&&this._enqueueUpdate(),this.updateComplete}async _enqueueUpdate(){let t;this._updateState=4|this._updateState;const e=this._updatePromise;this._updatePromise=new Promise((e=>t=e)),await e,this._hasConnected||await new Promise((t=>this._hasConnectedResolver=t));const s=this.performUpdate();null!=s&&"function"==typeof s.then&&await s,t(!this._hasRequestedUpdate)}get _hasConnected(){return 32&this._updateState}get _hasRequestedUpdate(){return 4&this._updateState}get hasUpdated(){return 1&this._updateState}performUpdate(){if(this._instanceProperties&&this._applyInstanceProperties(),this.shouldUpdate(this._changedProperties)){const t=this._changedProperties;this.update(t),this._markUpdated(),1&this._updateState||(this._updateState=1|this._updateState,this.firstUpdated(t)),this.updated(t)}else this._markUpdated()}_markUpdated(){this._changedProperties=new Map,this._updateState=-5&this._updateState}get updateComplete(){return this._updatePromise}shouldUpdate(t){return!0}update(t){void 0!==this._reflectingProperties&&this._reflectingProperties.size>0&&(this._reflectingProperties.forEach(((t,e)=>this._propertyToAttribute(e,this[e],t))),this._reflectingProperties=void 0)}updated(t){}firstUpdated(t){}}Y.finalized=!0;
-/**
- * @license
- * Copyright (c) 2017 The Polymer Project Authors. All rights reserved.
- * This code may only be used under the BSD style license found at
- * http://polymer.github.io/LICENSE.txt
- * The complete set of authors may be found at
- * http://polymer.github.io/AUTHORS.txt
- * The complete set of contributors may be found at
- * http://polymer.github.io/CONTRIBUTORS.txt
- * Code distributed by Google as part of the polymer project is also
- * subject to an additional IP rights grant found at
- * http://polymer.github.io/PATENTS.txt
- */
-const G=(t,e)=>"method"===e.kind&&e.descriptor&&!("value"in e.descriptor)?Object.assign({},e,{finisher(s){s.createProperty(e.key,t)}}):{kind:"field",key:Symbol(),placement:"own",descriptor:{},initializer(){"function"==typeof e.initializer&&(this[e.key]=e.initializer.call(this))},finisher(s){s.createProperty(e.key,t)}};function K(t){return(e,s)=>void 0!==s?((t,e,s)=>{e.constructor.createProperty(s,t)})(t,e,s):G(t,e)}
-/**
-@license
-Copyright (c) 2019 The Polymer Project Authors. All rights reserved.
-This code may only be used under the BSD style license found at
-http://polymer.github.io/LICENSE.txt The complete set of authors may be found at
-http://polymer.github.io/AUTHORS.txt The complete set of contributors may be
-found at http://polymer.github.io/CONTRIBUTORS.txt Code distributed by Google as
-part of the polymer project is also subject to an additional IP rights grant
-found at http://polymer.github.io/PATENTS.txt
-*/const Q="adoptedStyleSheets"in Document.prototype&&"replace"in CSSStyleSheet.prototype,X=Symbol();class Z{constructor(t,e){if(e!==X)throw new Error("CSSResult is not constructable. Use `unsafeCSS` or `css` instead.");this.cssText=t}get styleSheet(){return void 0===this._styleSheet&&(Q?(this._styleSheet=new CSSStyleSheet,this._styleSheet.replaceSync(this.cssText)):this._styleSheet=null),this._styleSheet}toString(){return this.cssText}}function tt(t,e=[]){for(let s=0,i=t.length;s<i;s++){const i=t[s];Array.isArray(i)?tt(i,e):e.push(i)}return e}
-/**
- * @license
- * Copyright (c) 2017 The Polymer Project Authors. All rights reserved.
- * This code may only be used under the BSD style license found at
- * http://polymer.github.io/LICENSE.txt
- * The complete set of authors may be found at
- * http://polymer.github.io/AUTHORS.txt
- * The complete set of contributors may be found at
- * http://polymer.github.io/CONTRIBUTORS.txt
- * Code distributed by Google as part of the polymer project is also
- * subject to an additional IP rights grant found at
- * http://polymer.github.io/PATENTS.txt
- */
-(window.litElementVersions||(window.litElementVersions=[])).push("2.0.1");const et=t=>t.flat?t.flat(1/0):tt(t);class st extends Y{static finalize(){super.finalize(),this._styles=this.hasOwnProperty(JSCompiler_renameProperty("styles",this))?this._getUniqueStyles():this._styles||[]}static _getUniqueStyles(){const t=this.styles,e=[];if(Array.isArray(t)){et(t).reduceRight(((t,e)=>(t.add(e),t)),new Set).forEach((t=>e.unshift(t)))}else t&&e.push(t);return e}initialize(){super.initialize(),this.renderRoot=this.createRenderRoot(),window.ShadowRoot&&this.renderRoot instanceof window.ShadowRoot&&this.adoptStyles()}createRenderRoot(){return this.attachShadow({mode:"open"})}adoptStyles(){const t=this.constructor._styles;0!==t.length&&(void 0===window.ShadyCSS||window.ShadyCSS.nativeShadow?Q?this.renderRoot.adoptedStyleSheets=t.map((t=>t.styleSheet)):this._needsShimAdoptedStyleSheets=!0:window.ShadyCSS.ScopingShim.prepareAdoptedCssText(t.map((t=>t.cssText)),this.localName))}connectedCallback(){super.connectedCallback(),this.hasUpdated&&void 0!==window.ShadyCSS&&window.ShadyCSS.styleElement(this)}update(t){super.update(t);const e=this.render();e instanceof g&&this.constructor.render(e,this.renderRoot,{scopeName:this.localName,eventContext:this}),this._needsShimAdoptedStyleSheets&&(this._needsShimAdoptedStyleSheets=!1,this.constructor._styles.forEach((t=>{const e=document.createElement("style");e.textContent=t.cssText,this.renderRoot.appendChild(e)})))}render(){}}st.finalized=!0,st.render=(t,e,s)=>{if(!s||"object"!=typeof s||!s.scopeName)throw new Error("The `scopeName` option is required.");const n=s.scopeName,o=O.has(e),r=U&&11===e.nodeType&&!!e.host,a=r&&!F.has(n),l=a?document.createDocumentFragment():e;if(((t,e,s)=>{let n=O.get(e);void 0===n&&(i(e,e.firstChild),O.set(e,n=new x(Object.assign({templateFactory:V},s))),n.appendInto(e)),n.setValue(t),n.commit()})(t,l,Object.assign({templateFactory:q(n)},s)),a){const t=O.get(l);O.delete(l);const s=t.value instanceof v?t.value.template:void 0;H(n,l,s),i(e,e.firstChild),e.appendChild(l),O.set(e,t)}!o&&r&&window.ShadyCSS.styleElement(e.host)};const it=((t,...e)=>{const s=e.reduce(((e,s,i)=>e+(t=>{if(t instanceof Z)return t.cssText;throw new Error(`Value passed to 'css' function must be a 'css' function result: ${t}. Use 'unsafeCSS' to pass non-literal values, but\n            take care to ensure page security.`)})(s)+t[i+1]),t[0]);return new Z(s,X)})`
+var X,tt;class et extends m{constructor(){super(...arguments),this.renderOptions={host:this},this._$Do=void 0}createRenderRoot(){var t,e;const i=super.createRenderRoot();return null!==(t=(e=this.renderOptions).renderBefore)&&void 0!==t||(e.renderBefore=i.firstChild),i}update(t){const e=this.render();this.hasUpdated||(this.renderOptions.isConnected=this.isConnected),super.update(t),this._$Do=((t,e,i)=>{var n,s;const o=null!==(n=null==i?void 0:i.renderBefore)&&void 0!==n?n:e;let r=o._$litPart$;if(void 0===r){const t=null!==(s=null==i?void 0:i.renderBefore)&&void 0!==s?s:null;o._$litPart$=r=new W(e.insertBefore(w(),t),t,void 0,null!=i?i:{})}return r._$AI(t),r})(e,this.renderRoot,this.renderOptions)}connectedCallback(){var t;super.connectedCallback(),null===(t=this._$Do)||void 0===t||t.setConnected(!0)}disconnectedCallback(){var t;super.disconnectedCallback(),null===(t=this._$Do)||void 0===t||t.setConnected(!1)}render(){return T}}et.finalized=!0,et._$litElement$=!0,null===(X=globalThis.litElementHydrateSupport)||void 0===X||X.call(globalThis,{LitElement:et});const it=globalThis.litElementPolyfillSupport;null==it||it({LitElement:et}),(null!==(tt=globalThis.litElementVersions)&&void 0!==tt?tt:globalThis.litElementVersions=[]).push("3.3.1");const nt=o`
   ha-card header {
     padding-top: 10px;
     padding-left: 16px;
@@ -254,65 +91,253 @@ found at http://polymer.github.io/PATENTS.txt
   .sub-item.active {
     background-color: var(--sub-active-color, rgba(55, 55, 255, 0.5));
   }
-`;function nt(t,e,s,i){var n,o=arguments.length,r=o<3?e:null===i?i=Object.getOwnPropertyDescriptor(e,s):i;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)r=Reflect.decorate(t,e,s,i);else for(var a=t.length-1;a>=0;a--)(n=t[a])&&(r=(o<3?n(r):o>3?n(e,s,r):n(e,s))||r);return o>3&&r&&Object.defineProperty(e,s,r),r}function ot(t,e){if("object"==typeof Reflect&&"function"==typeof Reflect.metadata)return Reflect.metadata(t,e)}class rt extends st{setConfig(t){this._config=t}updateNavItemProperty(t,e,s){const i=Object.assign({},this._config);i.nav_items[e][s]=t.target.value,this._config=i;const n=new CustomEvent("config-changed",{detail:{config:i},bubbles:!0,composed:!0});this.dispatchEvent(n)}addNavItem(t){const e=Object.assign({},this._config);e.nav_items.push({name:"New Nav Item",icon:"mdi:view-dashboard",destination:"/"}),this._config=e;const s=new CustomEvent("config-changed",{detail:{config:e},bubbles:!0,composed:!0});this.dispatchEvent(s)}render(){return this.hass&&this._config?R`
-      ${this._config.nav_items.map(((t,e)=>{var s;return R`
-          <div>
-            <h4>Nav Item ${e+1}</h4>
-            Name:
-            <input
-              .value=${t.name}
-              @focusout=${t=>this.updateNavItemProperty(t,e,"name")}
-            ></input>
-            Icon:
-            <input
-              .value=${t.icon}
-              @focusout=${t=>this.updateNavItemProperty(t,e,"icon")}
-            ></input>
-            Destination:
-            <input
-              .value=${t.destination}
-              @focusout=${t=>this.updateNavItemProperty(t,e,"destination")}
-            ></input>
-            Active:
-            <input
-              type="checkbox"
-              ?checked=${t.active}
-              @change=${t=>this.updateNavItemProperty(t,e,"active")}
-            ></input>
-            Unfolded:
-            <input
-              type="checkbox"
-              ?checked=${t.unfolded}
-              @change=${t=>this.updateNavItemProperty(t,e,"unfolded")}
-            ></input>
-            Sub Nav Items:
-            <div>
-              ${null===(s=t.sub_nav_items)||void 0===s?void 0:s.map(((t,e)=>R`
-                  <!-- Add SubNavItem configuration fields here -->
-                `))}
+`,st=o`
+  .card-config {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+  }
+
+  .nav-items {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .nav-item {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 16px;
+    border: 0.5px solid;
+    border-radius: 10px;
+    border-color: rgba(255, 255, 255, 0.3);
+    padding: 8px;
+  }
+
+  .nav-item-main-config {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .sub-nav-items {
+    display: flex;
+    flex-direction: column;
+    margin-top: 8px;
+    margin-left: 16px;
+  }
+
+  .sub-nav-item {
+    display: flex;
+    flex-direction: column;
+    border: 0.5px solid;
+    border-radius: 10px;
+    border-color: rgba(255, 255, 255, 0.3);
+    padding: 8px;
+  }
+
+  .sub-nav-item-main-config {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .icon-input {
+    max-width: calc(33.33% - 20px);
+  }
+
+  .name-input {
+    margin-left: 10px;
+    max-width: calc(33.33% - 10px);
+  }
+
+  .destination-input {
+    margin-left: 10px;
+    max-width: calc(33.33% - 10px);
+  }
+
+  button.add-nav-item {
+    align-self: flex-end;
+    margin-bottom: 16px;
+    background-color: var(--primary-color);
+    border-radius: 5px;
+    border: none;
+  }
+
+  button.add-sub-nav-item {
+    align-self: flex-end;
+    margin-bottom: 16px;
+    background-color: var(--primary-color);
+    border-radius: 5px;
+    border: none;
+  }
+
+  button.remove-nav-item {
+    align-self: flex-end;
+    margin-bottom: 16px;
+    background-color: var(--error-color);
+    border-radius: 5px;
+    border: none;
+  }
+
+  button.remove-sub-nav-item {
+    align-self: flex-end;
+    margin-bottom: 16px;
+    background-color: var(--error-color);
+    border-radius: 5px;
+    border: none;
+  }
+`;function ot(t,e,i,n){var s,o=arguments.length,r=o<3?e:null===n?n=Object.getOwnPropertyDescriptor(e,i):n;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)r=Reflect.decorate(t,e,i,n);else for(var a=t.length-1;a>=0;a--)(s=t[a])&&(r=(o<3?s(r):o>3?s(e,i,r):s(e,i))||r);return o>3&&r&&Object.defineProperty(e,i,r),r}function rt(t,e){if("object"==typeof Reflect&&"function"==typeof Reflect.metadata)return Reflect.metadata(t,e)}
+/**
+ * @license
+ * Copyright 2017 Google LLC
+ * SPDX-License-Identifier: BSD-3-Clause
+ */const at=(t,e)=>"method"===e.kind&&e.descriptor&&!("value"in e.descriptor)?{...e,finisher(i){i.createProperty(e.key,t)}}:{kind:"field",key:Symbol(),placement:"own",descriptor:{},originalKey:e.key,initializer(){"function"==typeof e.initializer&&(this[e.key]=e.initializer.call(this))},finisher(i){i.createProperty(e.key,t)}};function lt(t){return(e,i)=>void 0!==i?((t,e,i)=>{e.constructor.createProperty(i,t)})(t,e,i):at(t,e)
+/**
+ * @license
+ * Copyright 2021 Google LLC
+ * SPDX-License-Identifier: BSD-3-Clause
+ */}var ct;null===(ct=window.HTMLSlotElement)||void 0===ct||ct.prototype.assignedElements;class dt extends Event{constructor(t){super("config-changed",{bubbles:!0,composed:!0}),this.detail={config:t}}}class ht extends et{constructor(){super(...arguments),this._config={nav_name:"",nav_items:[]},this.card=null}setConfig(t){if(!t.nav_items)throw new Error("You need to define nav_items");this._config=t,this.card=document.querySelector("vertical-stacked-navigation-card")}static get styles(){return st}updated(t){this.card&&this.card.setConfig(this._config)}navNameChanged(t){if(!this._config||!t.target)return;const e=t.target,i=Object.assign({},this._config);i.nav_name=e.value,this._config=i;const n=new dt(i);this.dispatchEvent(n)}addNavItem(t){if(!this._config||!t.target)return;const e=Object.assign({},this._config);e.nav_items||(e.nav_items=[]),e.nav_items.push({name:"New Item",icon:"mdi:home",destination:""}),this._config=e;const i=new dt(e);this.dispatchEvent(i)}removeNavItem(t,e){if(!this._config||!t.target)return;t.target;const i=Object.assign({},this._config);i.nav_items.splice(e,1),this._config=i;const n=new dt(i);this.dispatchEvent(n)}navItemNameChanged(t,e){if(!this._config||!t.target)return;const i=t.target,n=Object.assign({},this._config);n.nav_items[e].name=i.value,this._config=n;const s=new dt(n);this.dispatchEvent(s)}navItemIconChanged(t,e){if(!this._config||!t.target)return;const i=t.target,n=Object.assign({},this._config);n.nav_items[e].icon=i.value,this._config=n;const s=new dt(n);this.dispatchEvent(s)}navItemDestinationChanged(t,e){if(!this._config||!t.target)return;const i=t.target,n=Object.assign({},this._config);n.nav_items[e].destination=i.value,this._config=n;const s=new dt(n);this.dispatchEvent(s)}addSubNavItem(t,e){if(!this._config||!t.target)return;t.target;const i=Object.assign({},this._config),n=i.nav_items[e];if(n){n.sub_nav_items||(n.sub_nav_items=[]),n.sub_nav_items.push({name:"New Sub Item",icon:"mdi:home",destination:"lovelace"}),this._config=i;const t=new dt(i);this.dispatchEvent(t)}}removeSubNavItem(t,e,i){var n;if(!this._config||!t.target)return;const s=Object.assign({},this._config),o=null===(n=s.nav_items[e])||void 0===n?void 0:n.sub_nav_items;if(o){o.splice(i,1),this._config=s;const t=new dt(s);this.dispatchEvent(t)}}subNavItemNameChanged(t,e,i){var n,s;if(!this._config||!t.target)return;const o=t.target,r=Object.assign({},this._config),a=null===(s=null===(n=r.nav_items[e])||void 0===n?void 0:n.sub_nav_items)||void 0===s?void 0:s[i];if(a){a.name=o.value,this._config=r;const t=new dt(r);this.dispatchEvent(t)}}subNavItemIconChanged(t,e,i){var n,s;if(!this._config||!t.target)return;const o=t.target,r=Object.assign({},this._config),a=null===(s=null===(n=r.nav_items[e])||void 0===n?void 0:n.sub_nav_items)||void 0===s?void 0:s[i];if(a){a.icon=o.value,this._config=r;const t=new dt(r);this.dispatchEvent(t)}}subNavItemDestinationChanged(t,e,i){var n,s;if(!this._config||!t.target)return;const o=t.target,r=Object.assign({},this._config),a=null===(s=null===(n=r.nav_items[e])||void 0===n?void 0:n.sub_nav_items)||void 0===s?void 0:s[i];if(a){a.destination=o.value,this._config=r;const t=new dt(r);this.dispatchEvent(t)}}navItemActiveChanged(t,e){if(!this._config||!t.target)return;const i=t.target,n=Object.assign({},this._config);n.nav_items[e].active=i.checked,this._config=n;const s=new dt(n);this.dispatchEvent(s)}subNavItemActiveChanged(t,e,i){var n,s;if(!this._config||!t.target)return;const o=t.target,r=Object.assign({},this._config),a=null===(s=null===(n=r.nav_items[e])||void 0===n?void 0:n.sub_nav_items)||void 0===s?void 0:s[i];if(a){a.active=o.checked,this._config=r;const t=new dt(r);this.dispatchEvent(t)}}navItemUnfoldedChanged(t,e){if(!this._config||!t.target)return;const i=t.target,n=Object.assign({},this._config);n.nav_items[e].unfolded=i.checked,this._config=n;const s=new dt(n);this.dispatchEvent(s)}render(){return this.hass&&this._config?j`
+      <header>
+        <paper-input
+          label="Nav Name"
+          .value="${this._config.nav_name||""}"
+          @change="${this.navNameChanged}"
+        ></paper-input>
+      </header>
+      <div class="nav-items">
+        ${this._config.nav_items.map(((t,e)=>{var i;return j`
+            <div class="nav-item" index="${e}">
+              <div class="nav-item-main-config">
+                <paper-input
+                  class="icon-input"
+                  label="Icon"
+                  .value="${t.icon||""}"
+                  @change="${t=>this.navItemIconChanged(t,e)}"
+                ></paper-input>
+                <paper-input
+                  class="name-input"
+                  label="Name"
+                  .value="${t.name||""}"
+                  @change="${t=>this.navItemNameChanged(t,e)}"
+                ></paper-input>
+                <paper-input
+                  class="destination-input"
+                  label="Destination"
+                  .value="${t.destination||""}"
+                  @change="${t=>this.navItemDestinationChanged(t,e)}"
+                ></paper-input>
+              </div>
+              <div class="nav-item-options">
+                <input
+                  type="checkbox"
+                  ?checked=${t.active}
+                  @change="${t=>this.navItemActiveChanged(t,e)}"
+                />
+                Active
+                <input
+                  type="checkbox"
+                  ?checked=${t.unfolded}
+                  @change="${t=>this.navItemUnfoldedChanged(t,e)}"
+                />
+                Unfolded
+                <button
+                  class="remove-nav-item"
+                  @click="${t=>this.removeNavItem(t,e)}"
+                >
+                  Remove
+                </button>
+              </div>
+              <div class="sub-nav-items">
+                ${null===(i=null==t?void 0:t.sub_nav_items)||void 0===i?void 0:i.map(((t,i)=>j`
+                    <div class="sub-nav-item" index="${i}">
+                      <div class="sub-nav-item-main-config">
+                        <paper-input
+                          class="icon-input"
+                          label="Icon"
+                          .value="${t.icon||""}"
+                          @change="${t=>this.subNavItemIconChanged(t,e,i)}"
+                        ></paper-input>
+                        <paper-input
+                          class="name-input"
+                          label="Name"
+                          .value="${t.name||""}"
+                          @change="${t=>this.subNavItemNameChanged(t,e,i)}"
+                        ></paper-input>
+                        <paper-input
+                          class="destination-input"
+                          label="Destination"
+                          .value="${t.destination||""}"
+                          @change="${t=>this.subNavItemDestinationChanged(t,e,i)}"
+                        ></paper-input>
+                      </div>
+                      <div class="sub-nav-item-options">
+                        <input
+                          type="checkbox"
+                          ?checked=${t.active}
+                          @change="${t=>this.subNavItemActiveChanged(t,e,i)}"
+                        />
+                        Active
+                        <button
+                          class="remove-sub-nav-item"
+                          @click="${t=>this.removeSubNavItem(t,e,i)}"
+                        >
+                          Remove
+                        </button>
+                      </div>
+                    </div>
+                  `))}
+                <button class="add-sub-nav-item" @click="${this.addSubNavItem}">
+                  <ha-icon .icon=${"mdi:plus"}></ha-icon>
+                </button>
+              </div>
             </div>
-          </div>
-        `}))}
-      <button @click=${this.addNavItem}>Add Nav Item</button>
-    `:R``}}nt([K({type:Object}),ot("design:type",Object)],rt.prototype,"hass",void 0),nt([K({type:Object}),ot("design:type",Object)],rt.prototype,"_config",void 0),customElements.define("vertical-stacked-nav-card-editor",rt);class at extends st{constructor(){super(...arguments),this.content=null,this.isContentSet=!1}static get styles(){return it}static getConfigElement(){return document.createElement("vertical-stacked-navigation-card-editor")}render(){const t=this.config.nav_items.map(((t,e)=>{const s=t.active?"active":"",i=t.sub_nav_items?t.sub_nav_items.map((t=>R`
-                <a href="${t.destination}" class="sub-item ${t.active?"active":""} nav-item-${e}">
-                  <ha-icon icon="${t.icon}"></ha-icon>
-                  <span>${t.name}</span>
-                </a>
-              `)):"";return R`
-            <div class="nav-item-container">
-                <a href="${t.sub_nav_items?"#":t.destination}"
-                class="nav-item ${s} nav-item-${e}"
-                @click=${t.sub_nav_items?this._toggleSubnav:null}>
+          `}))}
+        <div class="add-button-container">
+          <button class="add-nav-item" @click="${this.addNavItem}">
+            <ha-icon .icon=${"mdi:plus"}></ha-icon>
+          </button>
+        </div>
+      </div>
+    `:j``}}ot([lt({attribute:!1}),rt("design:type",Object)],ht.prototype,"hass",void 0),ot([lt(),rt("design:type",Object)],ht.prototype,"_config",void 0),customElements.define("vertical-stacked-navigation-card-editor",ht);class ut extends et{constructor(){super(...arguments),this.content=null,this.isContentSet=!1}static get styles(){return nt}static getConfigElement(){return document.createElement("vertical-stacked-navigation-card-editor")}static getStubConfig(){return{nav_name:"Navigation",nav_items:[{name:"Home",icon:"mdi:home",destination:"/lovelace/0"},{name:"Lights",icon:"mdi:lightbulb",sub_nav_items:[{name:"Living Room",icon:"mdi:lightbulb",destination:"/lovelace/1"}]}]}}render(){const t=this.config.nav_items.map(((t,e)=>{const i=t.active?"active":"",n=t.sub_nav_items?t.sub_nav_items.map((t=>j`
+              <a
+                href="${t.destination}"
+                class="sub-item ${t.active?"active":""} nav-item-${e}"
+              >
                 <ha-icon icon="${t.icon}"></ha-icon>
                 <span>${t.name}</span>
-                ${t.sub_nav_items?R`<ha-icon icon="mdi:chevron-down" class="subnav-indicator"></ha-icon>`:""}
-                </a>
-                <div class="sub-nav-items" style="display: ${t.unfolded?"block":"none"}">${i}</div>
-            </div>
-        `}));return R`
+              </a>
+            `)):"";return j`
+        <div class="nav-item-container">
+          <a
+            href="${t.sub_nav_items?"#":t.destination}"
+            class="nav-item ${i} nav-item-${e}"
+            @click=${t.sub_nav_items?this._toggleSubnav:null}
+          >
+            <ha-icon icon="${t.icon}"></ha-icon>
+            <span>${t.name}</span>
+            ${t.sub_nav_items?j`<ha-icon
+                  icon="mdi:chevron-down"
+                  class="subnav-indicator"
+                ></ha-icon>`:""}
+          </a>
+          <div
+            class="sub-nav-items"
+            style="display: ${t.unfolded?"block":"none"}"
+          >
+            ${n}
+          </div>
+        </div>
+      `}));return j`
       <ha-card>
-        ${"none"!==this.config.nav_name?R`
+        ${"none"!==this.config.nav_name?j`
               <header>
                 <style>
                   header {
@@ -328,4 +353,4 @@ found at http://polymer.github.io/PATENTS.txt
             `:""}
         <div class="card-content">${t}</div>
       </ha-card>
-    `}updated(t){var e,s,i,n,o,r,a,l,c,d,h,u,p,m,v,f,_,g;if(this.content||(this.content=this.shadowRoot.querySelector(".card-content")),!this.isContentSet&&this.content&&(this.isContentSet=!0,this.config.custom_styles)){const{colors:t,font_size:y}=this.config.custom_styles;t&&(this.style.setProperty("--main-background-color",null!==(s=null===(e=t.background)||void 0===e?void 0:e.main)&&void 0!==s?s:null),this.style.setProperty("--sub-background-color",null!==(n=null===(i=t.background)||void 0===i?void 0:i.sub)&&void 0!==n?n:null),this.style.setProperty("--main-text-color",null!==(r=null===(o=t.text)||void 0===o?void 0:o.main)&&void 0!==r?r:null),this.style.setProperty("--sub-text-color",null!==(l=null===(a=t.text)||void 0===a?void 0:a.sub)&&void 0!==l?l:null),this.style.setProperty("--main-hover-color",null!==(d=null===(c=t.hover)||void 0===c?void 0:c.main)&&void 0!==d?d:null),this.style.setProperty("--sub-hover-color",null!==(u=null===(h=t.hover)||void 0===h?void 0:h.sub)&&void 0!==u?u:null),this.style.setProperty("--main-active-color",null!==(m=null===(p=t.active)||void 0===p?void 0:p.main)&&void 0!==m?m:null),this.style.setProperty("--sub-active-color",null!==(f=null===(v=t.active)||void 0===v?void 0:v.sub)&&void 0!==f?f:null)),y&&(this.style.setProperty("--main-font-size",null!==(_=y.main)&&void 0!==_?_:null),this.style.setProperty("--sub-font-size",null!==(g=y.sub)&&void 0!==g?g:null))}}setConfig(t){if(!t.nav_items)throw new Error("You need to define nav_items");this.config=t}getCardSize(){return 1*this.config.nav_items.length}_toggleSubnav(t){t.preventDefault(),console.log("Toggle subnav triggered");const e=t.target.closest(".nav-item-container");if(!e||!e.querySelector(".sub-nav-items"))return;const s=e.querySelector(".sub-nav-items"),i=e.querySelector(".nav-item");"block"===s.style.display?(s.style.display="none",i.classList.remove("unfolded")):(s.style.display="block",i.classList.add("unfolded"))}}customElements.define("vertical-stacked-navigation-card",at),window.customCards=window.customCards||[],window.customCards.push({type:"vertical-stacked-navigation-card",name:"Vertical Stacked Navigation Card",preview:!1,description:"Adds a customizable Vertical Stacked Navigation."});export{at as VerticalStackedNavCard};
+    `}updated(t){var e,i,n,s,o,r,a,l,c,d,h,u,v,p,m,g,f,_;if(this.content||(this.content=this.shadowRoot.querySelector(".card-content")),!this.isContentSet&&this.content&&this.config.custom_styles){const{colors:t,font_size:b}=this.config.custom_styles;t&&(this.style.setProperty("--main-background-color",null!==(i=null===(e=t.background)||void 0===e?void 0:e.main)&&void 0!==i?i:null),this.style.setProperty("--sub-background-color",null!==(s=null===(n=t.background)||void 0===n?void 0:n.sub)&&void 0!==s?s:null),this.style.setProperty("--main-text-color",null!==(r=null===(o=t.text)||void 0===o?void 0:o.main)&&void 0!==r?r:null),this.style.setProperty("--sub-text-color",null!==(l=null===(a=t.text)||void 0===a?void 0:a.sub)&&void 0!==l?l:null),this.style.setProperty("--main-hover-color",null!==(d=null===(c=t.hover)||void 0===c?void 0:c.main)&&void 0!==d?d:null),this.style.setProperty("--sub-hover-color",null!==(u=null===(h=t.hover)||void 0===h?void 0:h.sub)&&void 0!==u?u:null),this.style.setProperty("--main-active-color",null!==(p=null===(v=t.active)||void 0===v?void 0:v.main)&&void 0!==p?p:null),this.style.setProperty("--sub-active-color",null!==(g=null===(m=t.active)||void 0===m?void 0:m.sub)&&void 0!==g?g:null)),b&&(this.style.setProperty("--main-font-size",null!==(f=b.main)&&void 0!==f?f:null),this.style.setProperty("--sub-font-size",null!==(_=b.sub)&&void 0!==_?_:null))}}setConfig(t){if(!t.nav_items)throw new Error("You need to define nav_items");this.config=t}getCardSize(){return 1*this.config.nav_items.length}_toggleSubnav(t){t.preventDefault();const e=t.target.closest(".nav-item-container");if(!e||!e.querySelector(".sub-nav-items"))return;const i=e.querySelector(".sub-nav-items"),n=e.querySelector(".nav-item");"block"===i.style.display?(i.style.display="none",n.classList.remove("unfolded")):(i.style.display="block",n.classList.add("unfolded"))}}customElements.define("vertical-stacked-navigation-card",ut),window.customCards=window.customCards||[],window.customCards.push({type:"vertical-stacked-navigation-card",name:"Vertical Stacked Navigation Card",description:"A vertical stacked navigation card"});export{ut as VerticalStackedNavCard};

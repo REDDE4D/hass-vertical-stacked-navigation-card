@@ -1,4 +1,4 @@
-import { css } from 'lit-element';
+import { css } from "lit";
 
 const styles = css`
   ha-card header {
@@ -73,4 +73,109 @@ const styles = css`
   }
 `;
 
-export default styles;
+const editorStyles = css`
+  .card-config {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+  }
+
+  .nav-items {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .nav-item {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 16px;
+    border: 0.5px solid;
+    border-radius: 10px;
+    border-color: rgba(255, 255, 255, 0.3);
+    padding: 8px;
+  }
+
+  .nav-item-main-config {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .sub-nav-items {
+    display: flex;
+    flex-direction: column;
+    margin-top: 8px;
+    margin-left: 16px;
+  }
+
+  .sub-nav-item {
+    display: flex;
+    flex-direction: column;
+    border: 0.5px solid;
+    border-radius: 10px;
+    border-color: rgba(255, 255, 255, 0.3);
+    padding: 8px;
+  }
+
+  .sub-nav-item-main-config {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .icon-input {
+    max-width: calc(33.33% - 20px);
+  }
+
+  .name-input {
+    margin-left: 10px;
+    max-width: calc(33.33% - 10px);
+  }
+
+  .destination-input {
+    margin-left: 10px;
+    max-width: calc(33.33% - 10px);
+  }
+
+  button.add-nav-item {
+    align-self: flex-end;
+    margin-bottom: 16px;
+    background-color: var(--primary-color);
+    border-radius: 5px;
+    border: none;
+  }
+
+  button.add-sub-nav-item {
+    align-self: flex-end;
+    margin-bottom: 16px;
+    background-color: var(--primary-color);
+    border-radius: 5px;
+    border: none;
+  }
+
+  button.remove-nav-item {
+    align-self: flex-end;
+    margin-bottom: 16px;
+    background-color: var(--error-color);
+    border-radius: 5px;
+    border: none;
+  }
+
+  button.remove-sub-nav-item {
+    align-self: flex-end;
+    margin-bottom: 16px;
+    background-color: var(--error-color);
+    border-radius: 5px;
+    border: none;
+  }
+`;
+
+export { styles, editorStyles };

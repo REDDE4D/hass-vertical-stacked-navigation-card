@@ -1,6 +1,6 @@
 import { LitElement, html, TemplateResult, CSSResult, PropertyValues } from "lit-element";
 import styles from "./styles";
-import { VerticalStackedNavCardEditor } from "./editor";
+import './editor';
 
 export interface NavItem {
   name: string;
@@ -58,8 +58,8 @@ export class VerticalStackedNavCard extends LitElement {
     return styles;
   }
 
-  public static async getConfigElement(): Promise<HTMLElement> {
-    return document.createElement("vertical-stacked-navigation-card-editor");
+  static getConfigElement() {
+    return document.createElement('vertical-stacked-navigation-card-editor');
   }
 
   protected render(): TemplateResult {
@@ -175,7 +175,6 @@ export class VerticalStackedNavCard extends LitElement {
   }  
 }
 customElements.define("vertical-stacked-navigation-card", VerticalStackedNavCard);
-customElements.define("vertical-stacked-navigation-card-editor", VerticalStackedNavCardEditor);
 (window as any).customCards = (window as any).customCards || [];
 (window as any).customCards.push({
   type: "vertical-stacked-navigation-card",

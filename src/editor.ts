@@ -1,57 +1,97 @@
-import { LitElement, html, TemplateResult, css, CSSResultGroup } from 'lit';
-import { HomeAssistant, fireEvent, LovelaceCardEditor, LovelaceCardConfig } from 'custom-card-helpers';
+import { LitElement, html, property } from 'lit-element';
+import { Config, NavItem } from './vertical-stacked-navigation-card';
 
-import { customElement, property, state } from 'lit/decorators';
-import { Config } from './vertical-stacked-navigation-card';
+export class VerticalStackedNavCardEditor extends LitElement {
+  @property({ type: Object }) hass: any;
+  @property({ type: Object }) _config!: Config;
 
-interface VerticalStackedNavCardConfig extends LovelaceCardConfig {
-  nav_items: Config['nav_items'];
-}
-
-@customElement('vertical-stacked-nav-card-editor')
-export class VerticalStackedNavCardEditor extends LitElement implements LovelaceCardEditor {
-  @property({ attribute: false }) public hass?: HomeAssistant;
-  @state() private _config?: VerticalStackedNavCardConfig;
-
-  public setConfig(config: VerticalStackedNavCardConfig): void {
+  setConfig(config: Config) {
     this._config = config;
   }
 
-  protected render(): TemplateResult | void {
+  updateNavItemProperty(ev: InputEvent, index: number, property: keyof NavItem) {
+    const _config = Object.assign({}, this._config);
+    (_config.nav_items[index] as any)[property] = (ev.target as HTMLInputElement).value;
+    this._config = _config;
+  
+    const event = new CustomEvent('config-changed', {
+      detail: { config: _config },
+      bubbles: true,
+      composed: true,
+    });
+    this.dispatchEvent(event);
+  }
+
+  // Method to add a new NavItem
+  addNavItem(ev: MouseEvent) {
+    const _config = Object.assign({}, this._config);
+    const newNavItem: NavItem = {
+      name: "New Nav Item",
+      icon: "mdi:view-dashboard",
+      destination: "/",
+    };
+    _config.nav_items.push(newNavItem);
+    this._config = _config;
+  
+    const event = new CustomEvent("config-changed", {
+      detail: { config: _config },
+      bubbles: true,
+      composed: true,
+    });
+    this.dispatchEvent(event);
+  }
+
+  render() {
     if (!this.hass || !this._config) {
       return html``;
     }
 
     return html`
-      <div>
-        <h3>Configuration</h3>
-        <p>Here, you can configure your Vertical Stacked Navigation Card.</p>
-        <!-- Add your form elements for the card configuration here. -->
-      </div>
+      ${this._config.nav_items.map(
+        (item, index) => html`
+          <div>
+            <h4>Nav Item ${index + 1}</h4>
+            Name:
+            <input
+              .value=${item.name}
+              @focusout=${(ev: InputEvent) => this.updateNavItemProperty(ev, index, 'name')}
+            ></input>
+            Icon:
+            <input
+              .value=${item.icon}
+              @focusout=${(ev: InputEvent) => this.updateNavItemProperty(ev, index, 'icon')}
+            ></input>
+            Destination:
+            <input
+              .value=${item.destination}
+              @focusout=${(ev: InputEvent) => this.updateNavItemProperty(ev, index, 'destination')}
+            ></input>
+            Active:
+            <input
+              type="checkbox"
+              ?checked=${item.active}
+              @change=${(ev: InputEvent) => this.updateNavItemProperty(ev, index, 'active')}
+            ></input>
+            Unfolded:
+            <input
+              type="checkbox"
+              ?checked=${item.unfolded}
+              @change=${(ev: InputEvent) => this.updateNavItemProperty(ev, index, 'unfolded')}
+            ></input>
+            Sub Nav Items:
+            <div>
+              ${item.sub_nav_items?.map(
+                (subItem, subIndex) => html`
+                  <!-- Add SubNavItem configuration fields here -->
+                `,
+              )}
+            </div>
+          </div>
+        `,
+      )}
+      <button @click=${this.addNavItem}>Add Nav Item</button>
     `;
   }
-
-  private _valueChanged(ev: InputEvent): void {
-    if (!this._config || !this.hass) {
-      return;
-    }
-    const target = ev.target as HTMLInputElement & { configValue: string };
-    if ((this as any)[`_${target.configValue}`] === target.value) {
-        return;
-      }
-      
-    if (target.configValue) {
-      if (target.value === '') {
-        const tmpConfig = { ...this._config };
-        delete tmpConfig[target.configValue];
-        this._config = tmpConfig;
-      } else {
-        this._config = {
-          ...this._config,
-          [target.configValue]: target.checked !== undefined ? target.checked : target.value,
-        };
-      }
-    }
-    fireEvent(this, 'config-changed', { config: this._config });
-  }  
 }
+
+customElements.define('vertical-stacked-nav-card-editor', VerticalStackedNavCardEditor);

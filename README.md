@@ -30,7 +30,7 @@ A custom Home Assistant card for displaying a vertical stacked navigation with o
 
 ## Usage
 
-To use the card, add the following configuration to a manual card:
+To use the card, add it via the GUI or add the following configuration to a manual card:
 
 ```yaml
 type: "custom:vertical-stacked-navigation-card"

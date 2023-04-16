@@ -123,6 +123,7 @@ const editorStyles = css`
     border-radius: 10px;
     border-color: rgba(255, 255, 255, 0.3);
     padding: 8px;
+    margin-bottom: 5px;
   }
 
   .sub-nav-item-main-config {
@@ -159,6 +160,7 @@ const editorStyles = css`
     background-color: var(--primary-color);
     border-radius: 5px;
     border: none;
+    margin-top: 5px;
   }
 
   button.remove-nav-item {

@@ -1,4 +1,4 @@
 /node_modules
-package-lock.json
-package.json
-/__test__
+__test__/__image_snapshots__/
+__test__/__snapshots__/
+__test__/__diff_output__/

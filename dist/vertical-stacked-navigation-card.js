@@ -141,6 +141,7 @@ var X,tt;class et extends m{constructor(){super(...arguments),this.renderOptions
     border-radius: 10px;
     border-color: rgba(255, 255, 255, 0.3);
     padding: 8px;
+    margin-bottom: 5px;
   }
 
   .sub-nav-item-main-config {
@@ -177,6 +178,7 @@ var X,tt;class et extends m{constructor(){super(...arguments),this.renderOptions
     background-color: var(--primary-color);
     border-radius: 5px;
     border: none;
+    margin-top: 5px;
   }
 
   button.remove-nav-item {
@@ -294,14 +296,20 @@ var X,tt;class et extends m{constructor(){super(...arguments),this.renderOptions
                       </div>
                     </div>
                   `))}
-                <button class="add-sub-nav-item" @click="${this.addSubNavItem}">
+                <button
+                  class="add-sub-nav-item"
+                  @click="${t=>this.addSubNavItem(t,e)}"
+                >
                   <ha-icon .icon=${"mdi:plus"}></ha-icon>
                 </button>
               </div>
             </div>
           `}))}
         <div class="add-button-container">
-          <button class="add-nav-item" @click="${this.addNavItem}">
+          <button
+            class="add-nav-item"
+            @click="${t=>this.addNavItem(t)}"
+          >
             <ha-icon .icon=${"mdi:plus"}></ha-icon>
           </button>
         </div>

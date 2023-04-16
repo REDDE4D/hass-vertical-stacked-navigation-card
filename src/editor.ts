@@ -453,7 +453,10 @@ export class VerticalStackedNavCardEditor extends LitElement {
                     </div>
                   `;
                 })}
-                <button class="add-sub-nav-item" @click="${this.addSubNavItem}">
+                <button
+                  class="add-sub-nav-item"
+                  @click="${(ev: InputEvent) => this.addSubNavItem(ev, index)}"
+                >
                   <ha-icon .icon=${"mdi:plus"}></ha-icon>
                 </button>
               </div>
@@ -461,7 +464,10 @@ export class VerticalStackedNavCardEditor extends LitElement {
           `;
         })}
         <div class="add-button-container">
-          <button class="add-nav-item" @click="${this.addNavItem}">
+          <button
+            class="add-nav-item"
+            @click="${(ev: InputEvent) => this.addNavItem(ev)}"
+          >
             <ha-icon .icon=${"mdi:plus"}></ha-icon>
           </button>
         </div>

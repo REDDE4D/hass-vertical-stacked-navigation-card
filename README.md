@@ -30,7 +30,7 @@ A custom Home Assistant card for displaying a vertical stacked navigation with o
 
 ## Usage
 
-To use the card, add the following configuration to a manual card:
+To use the card, add it via the GUI or add the following configuration to a manual card:
 
 ```yaml
 type: "custom:vertical-stacked-navigation-card"
@@ -66,13 +66,14 @@ nav_items:
 
 ### Navigation Items
 Each navigation item in the nav_items list should contain the following properties:
-| **Name**      | **Type** | **Default** | **Description**                                          |
-| ------------- | -------- | ----------- | -------------------------------------------------------- |
-| icon          | string   |             | The icon for the nav item (e.g., 'mdi:home')             |
-| name          | string   |             | The name of the nav item                                 |
-| destination   | string   | (optional)  | The destination URL for the nav item                     |
-| active        | bool     | false       | Set to `true` if the nav item should be marked as active |
-| sub_nav_items | list     | (optional)  | An list of items representing each sub-navigation item   |
+| **Name**      | **Type** | **Default** | **Description**                                             |
+| ------------- | -------- | ----------- | ----------------------------------------------------------- |
+| icon          | string   |             | The icon for the nav item (e.g., 'mdi:home')                |
+| name          | string   |             | The name of the nav item                                    |
+| destination   | string   | (optional)  | The destination URL for the nav item                        |
+| active        | bool     | false       | Set to `true` if the nav item should be marked as active    |
+| unfolded      | bool     | false       | Set to `true` if the nav item should be unfolded by default |
+| sub_nav_items | list     | (optional)  | An list of items representing each sub-navigation item      |
 
 ### Sub-navigation Items
 Each sub-navigation item in the `sub_nav_items` list should contain the following properties:

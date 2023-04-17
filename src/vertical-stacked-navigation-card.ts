@@ -155,8 +155,14 @@ export class VerticalStackedNavCard extends LitElement {
         }
 
         if (font_size) {
-          this.style.setProperty("--main-font-size", font_size.main ?? null);
-          this.style.setProperty("--sub-font-size", font_size.sub ?? null);
+          this.style.setProperty(
+            "--main-font-size",
+            font_size.text?.main ?? null
+          );
+          this.style.setProperty(
+            "--sub-font-size",
+            font_size.text?.sub ?? null
+          );
         }
       }
     }
@@ -167,6 +173,7 @@ export class VerticalStackedNavCard extends LitElement {
       throw new Error("You need to define nav_items");
     }
     this.config = config;
+    this.requestUpdate();
   }
 
   public getCardSize(): number {

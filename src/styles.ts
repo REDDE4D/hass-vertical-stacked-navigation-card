@@ -1,6 +1,14 @@
 import { css } from "lit";
 
 const styles = css`
+  .nav-item-container .nav-item span {
+    font-size: var(--main-font-size, 20px);
+  }
+
+  .nav-item-container .sub-nav-items .sub-item span {
+    font-size: var(--sub-font-size, 14px);
+  }
+
   ha-card header {
     padding-top: 10px;
     padding-left: 16px;
@@ -19,7 +27,6 @@ const styles = css`
     padding: 10px;
     color: var(--main-text-color, #fff);
     border-radius: 5px;
-    font-size: var(--main-font-size, 20px);
     position: relative;
   }
   .nav-item.unfolded {
@@ -35,7 +42,6 @@ const styles = css`
     background-color: var(--sub-background-color, rgba(255, 255, 255, 0.2));
     margin-left: 15px;
     padding-left: 25px;
-    font-size: var(--sub-font-size, 14px);
     border-radius: none;
   }
   .sub-item:first-child {
@@ -177,6 +183,67 @@ const editorStyles = css`
     background-color: var(--error-color);
     border-radius: 5px;
     border: none;
+  }
+
+  .custom-styles,
+  .custom-colors,
+  .custom-textcolor,
+  .custom-hover,
+  .custom-active,
+  .custom-background,
+  .custom-fontsize,
+  .custom-textsize,
+  .custom-iconsize {
+    margin-top: 16px;
+    padding: 8px;
+    border-radius: 4px;
+  }
+
+  .custom-styles summary,
+  .custom-colors summary,
+  .custom-textcolor summary,
+  .custom-hover summary,
+  .custom-active summary,
+  .custom-background summary,
+  .custom-fontsize summary,
+  .custom-textsize summary,
+  .custom-iconsize summary {
+    font-weight: bold;
+    cursor: pointer;
+    user-select: none;
+    color: var(--primary-text-color);
+  }
+
+  .custom-styles {
+    border: 1px solid var(--divider-color);
+  }
+
+  .custom-colors,
+  .custom-textcolor,
+  .custom-hover,
+  .custom-active,
+  .custom-background,
+  .custom-fontsize,
+  .custom-textsize,
+  .custom-iconsize {
+    background-color: var(--card-background-color);
+    border: 1px solid var(--divider-color);
+  }
+
+  paper-input {
+    --paper-input-container-input-color: var(--primary-text-color);
+    --paper-input-container-color: var(--secondary-text-color);
+    --paper-input-container-focus-color: var(--primary-color);
+    --paper-input-container-invalid-color: var(--error-color);
+  }
+
+  .color-preview {
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    border: 1px solid #ccc;
+    margin-right: 8px;
+    vertical-align: middle;
   }
 `;
 

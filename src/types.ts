@@ -34,8 +34,14 @@ export interface CustomStyles {
     };
   };
   font_size?: {
-    main?: string;
-    sub?: string;
+    text?: {
+      main?: string;
+      sub?: string;
+    };
+    icon?: {
+      main?: string;
+      sub?: string;
+    };
   };
 }
 
@@ -44,3 +50,16 @@ export interface Config {
   nav_items: NavItem[];
   custom_styles?: CustomStyles;
 }
+
+export type NavItemProperty =
+  | "name"
+  | "icon"
+  | "destination"
+  | "active"
+  | "unfolded";
+
+export type SubNavItemProperty = "name" | "icon" | "destination" | "active";
+export type ColorType = "background" | "text" | "hover" | "active";
+export type SubColorType = "main" | "sub";
+export type FontSizeType = "text" | "icon";
+export type SubFontSizeType = "main" | "sub";

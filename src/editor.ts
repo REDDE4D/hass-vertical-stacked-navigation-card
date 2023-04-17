@@ -4,20 +4,9 @@ import { Config } from "./types";
 import { HomeAssistant } from "custom-card-helpers";
 import { editorStyles } from "./styles";
 import { VerticalStackedNavCard } from "./vertical-stacked-navigation-card";
+import { helpersMixin } from "./helpers";
 
-class ConfigChangedEvent extends Event {
-  detail: { config: Config };
-
-  constructor(config: Config) {
-    super("config-changed", {
-      bubbles: true,
-      composed: true,
-    });
-    this.detail = { config: config };
-  }
-}
-
-export class VerticalStackedNavCardEditor extends LitElement {
+export class VerticalStackedNavCardEditor extends helpersMixin(LitElement) {
   @property({ attribute: false }) hass!: HomeAssistant;
   @property() _config: Config = { nav_name: "", nav_items: [] };
 
@@ -43,292 +32,6 @@ export class VerticalStackedNavCardEditor extends LitElement {
     }
   }
 
-  navNameChanged(ev: InputEvent) {
-    if (!this._config || !ev.target) {
-      return;
-    }
-
-    const target = ev.target as HTMLInputElement;
-    const _config = Object.assign({}, this._config);
-
-    _config.nav_name = target.value;
-    this._config = _config;
-
-    const event = new ConfigChangedEvent(_config);
-
-    this.dispatchEvent(event);
-  }
-
-  addNavItem(ev: InputEvent) {
-    if (!this._config || !ev.target) {
-      return;
-    }
-
-    const _config = Object.assign({}, this._config);
-
-    if (!_config.nav_items) {
-      _config.nav_items = [];
-    }
-
-    _config.nav_items.push({
-      name: "New Item",
-      icon: "mdi:home",
-      destination: "",
-    });
-
-    this._config = _config;
-
-    const event = new ConfigChangedEvent(_config);
-
-    this.dispatchEvent(event);
-  }
-
-  removeNavItem(ev: InputEvent, index: number) {
-    if (!this._config || !ev.target) {
-      return;
-    }
-
-    const target = ev.target as HTMLElement;
-    const _config = Object.assign({}, this._config);
-
-    _config.nav_items.splice(index, 1);
-
-    this._config = _config;
-
-    const event = new ConfigChangedEvent(_config);
-
-    this.dispatchEvent(event);
-  }
-
-  navItemNameChanged(ev: InputEvent, index: number) {
-    if (!this._config || !ev.target) {
-      return;
-    }
-
-    const target = ev.target as HTMLInputElement;
-    const _config = Object.assign({}, this._config);
-
-    _config.nav_items[index].name = target.value;
-
-    this._config = _config;
-
-    const event = new ConfigChangedEvent(_config);
-
-    this.dispatchEvent(event);
-  }
-
-  navItemIconChanged(ev: InputEvent, index: number) {
-    if (!this._config || !ev.target) {
-      return;
-    }
-
-    const target = ev.target as HTMLInputElement;
-    const _config = Object.assign({}, this._config);
-
-    _config.nav_items[index].icon = target.value;
-
-    this._config = _config;
-
-    const event = new ConfigChangedEvent(_config);
-
-    this.dispatchEvent(event);
-  }
-
-  navItemDestinationChanged(ev: InputEvent, index: number) {
-    if (!this._config || !ev.target) {
-      return;
-    }
-
-    const target = ev.target as HTMLInputElement;
-    const _config = Object.assign({}, this._config);
-
-    _config.nav_items[index].destination = target.value;
-
-    this._config = _config;
-
-    const event = new ConfigChangedEvent(_config);
-
-    this.dispatchEvent(event);
-  }
-
-  addSubNavItem(ev: InputEvent, parentIndex: number) {
-    if (!this._config || !ev.target) {
-      return;
-    }
-
-    const target = ev.target as HTMLInputElement;
-    const _config = Object.assign({}, this._config);
-
-    const navItem = _config.nav_items[parentIndex];
-    if (navItem) {
-      if (!navItem.sub_nav_items) {
-        navItem.sub_nav_items = [];
-      }
-
-      navItem.sub_nav_items.push({
-        name: "New Sub Item",
-        icon: "mdi:home",
-        destination: "lovelace",
-      });
-
-      this._config = _config;
-
-      const event = new ConfigChangedEvent(_config);
-
-      this.dispatchEvent(event);
-    }
-  }
-
-  removeSubNavItem(ev: InputEvent, parentIndex: number, subIndex: number) {
-    if (!this._config || !ev.target) {
-      return;
-    }
-
-    const _config = Object.assign({}, this._config);
-
-    const subNavItems = _config.nav_items[parentIndex]?.sub_nav_items;
-
-    if (subNavItems) {
-      subNavItems.splice(subIndex, 1);
-
-      this._config = _config;
-
-      const event = new ConfigChangedEvent(_config);
-
-      this.dispatchEvent(event);
-    }
-  }
-
-  subNavItemNameChanged(ev: InputEvent, parentIndex: number, subIndex: number) {
-    if (!this._config || !ev.target) {
-      return;
-    }
-
-    const target = ev.target as HTMLInputElement;
-    const _config = Object.assign({}, this._config);
-
-    const subNavItem =
-      _config.nav_items[parentIndex]?.sub_nav_items?.[subIndex];
-
-    if (subNavItem) {
-      subNavItem.name = target.value;
-
-      this._config = _config;
-
-      const event = new ConfigChangedEvent(_config);
-
-      this.dispatchEvent(event);
-    }
-  }
-
-  subNavItemIconChanged(ev: InputEvent, parentIndex: number, subIndex: number) {
-    if (!this._config || !ev.target) {
-      return;
-    }
-
-    const target = ev.target as HTMLInputElement;
-    const _config = Object.assign({}, this._config);
-
-    const subNavItem =
-      _config.nav_items[parentIndex]?.sub_nav_items?.[subIndex];
-
-    if (subNavItem) {
-      subNavItem.icon = target.value;
-
-      this._config = _config;
-
-      const event = new ConfigChangedEvent(_config);
-
-      this.dispatchEvent(event);
-    }
-  }
-
-  subNavItemDestinationChanged(
-    ev: InputEvent,
-    parentIndex: number,
-    subIndex: number
-  ) {
-    if (!this._config || !ev.target) {
-      return;
-    }
-
-    const target = ev.target as HTMLInputElement;
-    const _config = Object.assign({}, this._config);
-
-    const subNavItem =
-      _config.nav_items[parentIndex]?.sub_nav_items?.[subIndex];
-
-    if (subNavItem) {
-      subNavItem.destination = target.value;
-
-      this._config = _config;
-
-      const event = new ConfigChangedEvent(_config);
-
-      this.dispatchEvent(event);
-    }
-  }
-
-  navItemActiveChanged(ev: InputEvent, index: number) {
-    if (!this._config || !ev.target) {
-      return;
-    }
-
-    const target = ev.target as HTMLInputElement;
-    const _config = Object.assign({}, this._config);
-
-    _config.nav_items[index].active = target.checked;
-
-    this._config = _config;
-
-    const event = new ConfigChangedEvent(_config);
-
-    this.dispatchEvent(event);
-  }
-
-  subNavItemActiveChanged(
-    ev: InputEvent,
-    parentIndex: number,
-    subIndex: number
-  ) {
-    if (!this._config || !ev.target) {
-      return;
-    }
-
-    const target = ev.target as HTMLInputElement;
-    const _config = Object.assign({}, this._config);
-
-    const subNavItem =
-      _config.nav_items[parentIndex]?.sub_nav_items?.[subIndex];
-
-    if (subNavItem) {
-      subNavItem.active = target.checked;
-
-      this._config = _config;
-
-      const event = new ConfigChangedEvent(_config);
-
-      this.dispatchEvent(event);
-    }
-  }
-
-  navItemUnfoldedChanged(ev: InputEvent, index: number) {
-    if (!this._config || !ev.target) {
-      return;
-    }
-
-    const target = ev.target as HTMLInputElement;
-    const _config = Object.assign({}, this._config);
-
-    _config.nav_items[index].unfolded = target.checked;
-
-    this._config = _config;
-
-    const event = new ConfigChangedEvent(_config);
-
-    this.dispatchEvent(event);
-  }
-
   render() {
     if (!this.hass || !this._config) {
       return html``;
@@ -339,6 +42,7 @@ export class VerticalStackedNavCardEditor extends LitElement {
         <paper-input
           label="Nav Name"
           .value="${this._config.nav_name || ""}"
+          placeholder="My Custom Navigation"
           @change="${this.navNameChanged}"
         ></paper-input>
       </header>
@@ -347,26 +51,28 @@ export class VerticalStackedNavCardEditor extends LitElement {
           return html`
             <div class="nav-item" index="${index}">
               <div class="nav-item-main-config">
-                <paper-input
-                  class="icon-input"
+                <icon-autocomplete
                   label="Icon"
+                  placeholder="mdi:home"
                   .value="${navItem.icon || ""}"
                   @change="${(ev: InputEvent) =>
-                    this.navItemIconChanged(ev, index)}"
-                ></paper-input>
+                    this.navItemChanged(ev, index, "icon")}"
+                ></icon-autocomplete>
                 <paper-input
                   class="name-input"
                   label="Name"
+                  placeholder="Home"
                   .value="${navItem.name || ""}"
                   @change="${(ev: InputEvent) =>
-                    this.navItemNameChanged(ev, index)}"
+                    this.navItemChanged(ev, index, "name")}"
                 ></paper-input>
                 <paper-input
                   class="destination-input"
+                  placeholder="/lovelace/home"
                   label="Destination"
                   .value="${navItem.destination || ""}"
                   @change="${(ev: InputEvent) =>
-                    this.navItemDestinationChanged(ev, index)}"
+                    this.navItemChanged(ev, index, "destination")}"
                 ></paper-input>
               </div>
               <div class="nav-item-options">
@@ -374,14 +80,14 @@ export class VerticalStackedNavCardEditor extends LitElement {
                   type="checkbox"
                   ?checked=${navItem.active}
                   @change="${(ev: InputEvent) =>
-                    this.navItemActiveChanged(ev, index)}"
+                    this.navItemChanged(ev, index, "active")}"
                 />
                 Active
                 <input
                   type="checkbox"
                   ?checked=${navItem.unfolded}
                   @change="${(ev: InputEvent) =>
-                    this.navItemUnfoldedChanged(ev, index)}"
+                    this.navItemChanged(ev, index, "unfolded")}"
                 />
                 Unfolded
                 <button
@@ -399,34 +105,40 @@ export class VerticalStackedNavCardEditor extends LitElement {
                         <paper-input
                           class="icon-input"
                           label="Icon"
+                          placeholder="mdi:home"
                           .value="${subNavItem.icon || ""}"
                           @change="${(ev: InputEvent) =>
-                            this.subNavItemIconChanged(
+                            this.subNavItemChanged(
                               ev,
                               index,
-                              subNavItemIndex
+                              subNavItemIndex,
+                              "icon"
                             )}"
                         ></paper-input>
                         <paper-input
                           class="name-input"
                           label="Name"
+                          placeholder="Home"
                           .value="${subNavItem.name || ""}"
                           @change="${(ev: InputEvent) =>
-                            this.subNavItemNameChanged(
+                            this.subNavItemChanged(
                               ev,
                               index,
-                              subNavItemIndex
+                              subNavItemIndex,
+                              "name"
                             )}"
                         ></paper-input>
                         <paper-input
                           class="destination-input"
                           label="Destination"
+                          placeholder="/lovelace/home"
                           .value="${subNavItem.destination || ""}"
                           @change="${(ev: InputEvent) =>
-                            this.subNavItemDestinationChanged(
+                            this.subNavItemChanged(
                               ev,
                               index,
-                              subNavItemIndex
+                              subNavItemIndex,
+                              "destination"
                             )}"
                         ></paper-input>
                       </div>
@@ -435,10 +147,11 @@ export class VerticalStackedNavCardEditor extends LitElement {
                           type="checkbox"
                           ?checked=${subNavItem.active}
                           @change="${(ev: InputEvent) =>
-                            this.subNavItemActiveChanged(
+                            this.subNavItemChanged(
                               ev,
                               index,
-                              subNavItemIndex
+                              subNavItemIndex,
+                              "active"
                             )}"
                         />
                         Active
@@ -457,7 +170,7 @@ export class VerticalStackedNavCardEditor extends LitElement {
                   class="add-sub-nav-item"
                   @click="${(ev: InputEvent) => this.addSubNavItem(ev, index)}"
                 >
-                  <ha-icon .icon=${"mdi:plus"}></ha-icon>
+                  <ha-icon .icon=${"mdi:plus"}></ha-icon> Add Sub Item
                 </button>
               </div>
             </div>
@@ -468,10 +181,147 @@ export class VerticalStackedNavCardEditor extends LitElement {
             class="add-nav-item"
             @click="${(ev: InputEvent) => this.addNavItem(ev)}"
           >
-            <ha-icon .icon=${"mdi:plus"}></ha-icon>
+            <ha-icon .icon=${"mdi:plus"}></ha-icon> Add Nav Item
           </button>
         </div>
       </div>
+      <details class="custom-styles">
+        <summary>Custom Styles</summary>
+        <details class="custom-colors">
+          <summary>Colors</summary>
+          <details class="custom-textcolor">
+            <summary>Text Color</summary>
+            <div
+              class="color-preview text-main"
+              style="background-color: ${this._config.custom_styles?.colors
+                ?.text?.main || ""};"
+            ></div>
+            <paper-input
+              label="Main"
+              placeholder="rgba(255, 255, 255, 1)"
+              .value="${this._config.custom_styles?.colors?.text?.main || ""}"
+              @change="${(ev: InputEvent) =>
+                this.customStyleColorsChanged(ev, "text", "main")}"
+            ></paper-input>
+            <div
+              class="color-preview text-sub"
+              style="background-color: ${this._config.custom_styles?.colors
+                ?.text?.sub || ""};"
+            ></div>
+            <paper-input
+              label="Sub"
+              placeholder="rgba(255, 255, 255, 0.5)"
+              .value="${this._config.custom_styles?.colors?.text?.sub || ""}"
+              @change="${(ev: InputEvent) =>
+                this.customStyleColorsChanged(ev, "text", "sub")}"
+            ></paper-input>
+          </details>
+          <details class="custom-hover">
+            <summary>Hover Color</summary>
+            <div
+              class="color-preview hover-main"
+              style="background-color: ${this._config.custom_styles?.colors
+                ?.hover?.main || ""};"
+            ></div>
+            <paper-input
+              label="Main"
+              placeholder="rgba(255, 255, 255, 0.1)"
+              .value="${this._config.custom_styles?.colors?.hover?.main || ""}"
+              @change="${(ev: InputEvent) =>
+                this.customStyleColorsChanged(ev, "hover", "main")}"
+            ></paper-input>
+            <div
+              class="color-preview hover-sub"
+              style="background-color: ${this._config.custom_styles?.colors
+                ?.hover?.sub || ""};"
+            ></div>
+            <paper-input
+              label="Sub"
+              placeholder="rgba(255, 255, 255, 0.05)"
+              .value="${this._config.custom_styles?.colors?.hover?.sub || ""}"
+              @change="${(ev: InputEvent) =>
+                this.customStyleColorsChanged(ev, "hover", "sub")}"
+            ></paper-input>
+          </details>
+          <details class="custom-active">
+            <summary>Active Color</summary>
+            <div
+              class="color-preview active-main"
+              style="background-color: ${this._config.custom_styles?.colors
+                ?.active?.main || ""};"
+            ></div>
+            <paper-input
+              label="Main"
+              placeholder="rgba(255, 255, 255, 0.2)"
+              .value="${this._config.custom_styles?.colors?.active?.main || ""}"
+              @change="${(ev: InputEvent) =>
+                this.customStyleColorsChanged(ev, "active", "main")}"
+            ></paper-input>
+            <div
+              class="color-preview active-sub"
+              style="background-color: ${this._config.custom_styles?.colors
+                ?.active?.sub || ""};"
+            ></div>
+            <paper-input
+              label="Sub"
+              placeholder="rgba(255, 255, 255, 0.1)"
+              .value="${this._config.custom_styles?.colors?.active?.sub || ""}"
+              @change="${(ev: InputEvent) =>
+                this.customStyleColorsChanged(ev, "active", "sub")}"
+            ></paper-input>
+          </details>
+          <details class="custom-background">
+            <summary>Background Color</summary>
+            <div
+              class="color-preview background-main"
+              style="background-color: ${this._config.custom_styles?.colors
+                ?.background?.main || ""};"
+            ></div>
+            <paper-input
+              label="Main"
+              placeholder="rgba(0, 0, 0, 0.5)"
+              .value="${this._config.custom_styles?.colors?.background?.main ||
+              ""}"
+              @change="${(ev: InputEvent) =>
+                this.customStyleColorsChanged(ev, "background", "main")}"
+            ></paper-input>
+            <div
+              class="color-preview background-sub"
+              style="background-color: ${this._config.custom_styles?.colors
+                ?.background?.sub || ""};"
+            ></div>
+            <paper-input
+              label="Sub"
+              placeholder="rgba(0, 0, 0, 0.3)"
+              .value="${this._config.custom_styles?.colors?.background?.sub ||
+              ""}"
+              @change="${(ev: InputEvent) =>
+                this.customStyleColorsChanged(ev, "background", "sub")}"
+            ></paper-input>
+          </details>
+        </details>
+        <details class="custom-fontsize">
+          <summary>Fontsize</summary>
+          <details class="custom-textsize">
+            <summary>Text Size</summary>
+            <paper-input
+              label="Main"
+              placeholder="1.2rem"
+              .value="${this._config.custom_styles?.font_size?.text?.main ||
+              ""}"
+              @change="${(ev: InputEvent) =>
+                this.customStyleFontSizeChanged(ev, "text", "main")}"
+            ></paper-input>
+            <paper-input
+              label="Sub"
+              placeholder="0.8rem"
+              .value="${this._config.custom_styles?.font_size?.text?.sub || ""}"
+              @change="${(ev: InputEvent) =>
+                this.customStyleFontSizeChanged(ev, "text", "sub")}"
+            ></paper-input>
+          </details>
+        </details>
+      </details>
     `;
   }
 }

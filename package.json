@@ -1,6 +1,6 @@
 {
   "name": "hass-vertical-stacked-navigation-card",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Lovelace Vertical Stacked Navigation Card",
   "keywords": [
     "home-assistant",
@@ -10,7 +10,7 @@
     "lovelace",
     "custom-cards"
   ],
-  "main": "dist/register-card.js",
+  "main": "dist/vertical-stacked-navigation-card.js",
   "devDependencies": {
     "custom-card-helpers": "^1.9.0",
     "hass-taste-test": "^0.2.1",
@@ -19,6 +19,8 @@
     "playwright": "^1.32.3"
   },
   "dependencies": {
+    "@material/mwc-textfield": "^0.27.0",
+    "@mdi/js": "^7.2.96",
     "lit": "^2.7.2",
     "rollup": "^2.79.1",
     "rollup-plugin-commonjs": "^10.1.0",

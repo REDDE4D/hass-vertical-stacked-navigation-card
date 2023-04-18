@@ -68,7 +68,9 @@ export class VerticalStackedNavCard extends LitElement {
         <div class="nav-item-container">
           <a
             href="${item.sub_nav_items ? "#" : item.destination}"
-            class="nav-item ${isActive} nav-item-${index}"
+            class="nav-item ${isActive} ${item.unfolded
+              ? "unfolded"
+              : ""} nav-item-${index}"
             @click=${item.sub_nav_items ? this._toggleSubnav : null}
           >
             <ha-icon icon="${item.icon}"></ha-icon>

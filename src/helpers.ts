@@ -84,7 +84,7 @@ export function helpersMixin<TBase extends Constructor<LitElement>>(
       this.dispatchEvent(event);
     }
 
-    navItemChanged(ev: InputEvent, index: number, property: NavItemProperty) {
+    navItemChanged(ev: CustomEvent, index: number, property: NavItemProperty) {
       if (!this._config || !ev.target) {
         return;
       }
@@ -92,10 +92,17 @@ export function helpersMixin<TBase extends Constructor<LitElement>>(
       const target = ev.target as HTMLInputElement;
       const _config = Object.assign({}, this._config);
 
+      let newValue;
+      if (ev.type === "value-changed") {
+        newValue = ev.detail.value;
+      } else {
+        newValue = target.value;
+      }
+
       if (property === "active" || property === "unfolded") {
         (_config.nav_items[index] as any)[property] = target.checked;
       } else {
-        (_config.nav_items[index] as any)[property] = target.value;
+        (_config.nav_items[index] as any)[property] = newValue;
       }
 
       this._config = _config;
@@ -158,7 +165,7 @@ export function helpersMixin<TBase extends Constructor<LitElement>>(
     }
 
     subNavItemChanged(
-      ev: InputEvent,
+      ev: CustomEvent,
       parentIndex: number,
       subIndex: number,
       property: SubNavItemProperty
@@ -174,10 +181,17 @@ export function helpersMixin<TBase extends Constructor<LitElement>>(
         _config.nav_items[parentIndex]?.sub_nav_items?.[subIndex];
 
       if (subNavItem) {
+        let newValue;
+        if (ev.type === "value-changed") {
+          newValue = ev.detail.value;
+        } else {
+          newValue = target.value;
+        }
+
         if (property === "active") {
           (subNavItem as any)[property] = target.checked;
         } else {
-          (subNavItem as any)[property] = target.value;
+          (subNavItem as any)[property] = newValue;
         }
         this._config = _config;
 

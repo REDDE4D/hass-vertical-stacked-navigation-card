@@ -5,6 +5,7 @@ import { HomeAssistant } from "custom-card-helpers";
 import { editorStyles } from "./styles";
 import { VerticalStackedNavCard } from "./vertical-stacked-navigation-card";
 import { helpersMixin } from "./helpers";
+import "./nav-path";
 
 export class VerticalStackedNavCardEditor extends helpersMixin(LitElement) {
   @property({ attribute: false }) hass!: HomeAssistant;
@@ -39,152 +40,192 @@ export class VerticalStackedNavCardEditor extends helpersMixin(LitElement) {
 
     return html`
       <header>
-        <paper-input
+        <ha-textfield
           label="Nav Name"
+          class="main-nav-name"
           .value="${this._config.nav_name || ""}"
           placeholder="My Custom Navigation"
           @change="${this.navNameChanged}"
-        ></paper-input>
+        ></ha-textfield>
       </header>
       <div class="nav-items">
-        ${this._config.nav_items.map((navItem, index) => {
-          return html`
-            <div class="nav-item" index="${index}">
-              <div class="nav-item-main-config">
-                <icon-autocomplete
-                  label="Icon"
-                  placeholder="mdi:home"
-                  .value="${navItem.icon || ""}"
-                  @change="${(ev: InputEvent) =>
-                    this.navItemChanged(ev, index, "icon")}"
-                ></icon-autocomplete>
-                <paper-input
-                  class="name-input"
-                  label="Name"
-                  placeholder="Home"
-                  .value="${navItem.name || ""}"
-                  @change="${(ev: InputEvent) =>
-                    this.navItemChanged(ev, index, "name")}"
-                ></paper-input>
-                <paper-input
-                  class="destination-input"
-                  placeholder="/lovelace/home"
-                  label="Destination"
-                  .value="${navItem.destination || ""}"
-                  @change="${(ev: InputEvent) =>
-                    this.navItemChanged(ev, index, "destination")}"
-                ></paper-input>
-              </div>
-              <div class="nav-item-options">
-                <input
-                  type="checkbox"
-                  ?checked=${navItem.active}
-                  @change="${(ev: InputEvent) =>
-                    this.navItemChanged(ev, index, "active")}"
-                />
-                Active
-                <input
-                  type="checkbox"
-                  ?checked=${navItem.unfolded}
-                  @change="${(ev: InputEvent) =>
-                    this.navItemChanged(ev, index, "unfolded")}"
-                />
-                Unfolded
-                <button
-                  class="remove-nav-item"
-                  @click="${(ev: InputEvent) => this.removeNavItem(ev, index)}"
-                >
-                  Remove
-                </button>
-              </div>
-              <div class="sub-nav-items">
-                ${navItem?.sub_nav_items?.map((subNavItem, subNavItemIndex) => {
-                  return html`
-                    <div class="sub-nav-item" index="${subNavItemIndex}">
-                      <div class="sub-nav-item-main-config">
-                        <paper-input
-                          class="icon-input"
-                          label="Icon"
-                          placeholder="mdi:home"
-                          .value="${subNavItem.icon || ""}"
-                          @change="${(ev: InputEvent) =>
-                            this.subNavItemChanged(
-                              ev,
-                              index,
-                              subNavItemIndex,
-                              "icon"
-                            )}"
-                        ></paper-input>
-                        <paper-input
-                          class="name-input"
-                          label="Name"
-                          placeholder="Home"
-                          .value="${subNavItem.name || ""}"
-                          @change="${(ev: InputEvent) =>
-                            this.subNavItemChanged(
-                              ev,
-                              index,
-                              subNavItemIndex,
-                              "name"
-                            )}"
-                        ></paper-input>
-                        <paper-input
-                          class="destination-input"
-                          label="Destination"
-                          placeholder="/lovelace/home"
-                          .value="${subNavItem.destination || ""}"
-                          @change="${(ev: InputEvent) =>
-                            this.subNavItemChanged(
-                              ev,
-                              index,
-                              subNavItemIndex,
-                              "destination"
-                            )}"
-                        ></paper-input>
-                      </div>
-                      <div class="sub-nav-item-options">
-                        <input
-                          type="checkbox"
-                          ?checked=${subNavItem.active}
-                          @change="${(ev: InputEvent) =>
-                            this.subNavItemChanged(
-                              ev,
-                              index,
-                              subNavItemIndex,
-                              "active"
-                            )}"
-                        />
-                        Active
-                        <button
-                          class="remove-sub-nav-item"
-                          @click="${(ev: InputEvent) =>
-                            this.removeSubNavItem(ev, index, subNavItemIndex)}"
-                        >
-                          Remove
-                        </button>
-                      </div>
-                    </div>
-                  `;
-                })}
-                <button
-                  class="add-sub-nav-item"
-                  @click="${(ev: InputEvent) => this.addSubNavItem(ev, index)}"
-                >
-                  <ha-icon .icon=${"mdi:plus"}></ha-icon> Add Sub Item
-                </button>
-              </div>
-            </div>
-          `;
-        })}
-        <div class="add-button-container">
-          <button
+        <div class="nav-items-header">
+          <h3>Navigation Items</h3>
+          <mwc-button
             class="add-nav-item"
             @click="${(ev: InputEvent) => this.addNavItem(ev)}"
           >
             <ha-icon .icon=${"mdi:plus"}></ha-icon> Add Nav Item
-          </button>
+          </mwc-button>
         </div>
+        ${this._config.nav_items.map((navItem, index) => {
+          return html`
+            <div class="nav-item" index="${index}">
+              <div class="nav-item-main-config">
+                <div class="main-config-row">
+                  <ha-icon-picker
+                    label="Icon"
+                    class="input-icon-picker"
+                    placeholder="mdi:home"
+                    .value="${navItem.icon || ""}"
+                    @value-changed="${(ev: CustomEvent) =>
+                      this.navItemChanged(ev, index, "icon")}"
+                  ></ha-icon-picker>
+                  <ha-textfield
+                    label="Name"
+                    class="input-name"
+                    placeholder="Home"
+                    .value="${navItem.name || ""}"
+                    @change="${(ev: CustomEvent) =>
+                      this.navItemChanged(ev, index, "name")}"
+                  ></ha-textfield>
+                </div>
+                <div class="main-config-row">
+                  <destination-input
+                    placeholder="/lovelace/home"
+                    class="destination-input"
+                    label="Destination"
+                    .value="${navItem.destination || ""}"
+                    .hass="${this.hass}"
+                    @change="${(ev: CustomEvent) =>
+                      this.navItemChanged(ev, index, "destination")}"
+                  ></destination-input>
+                </div>
+              </div>
+              <div class="nav-item-options">
+                <ha-formfield>
+                  <ha-switch
+                    type="checkbox"
+                    ?checked=${navItem.active}
+                    @change="${(ev: CustomEvent) =>
+                      this.navItemChanged(ev, index, "active")}"
+                  ></ha-switch>
+                  <label class="mdc-label">Active</label>
+                </ha-formfield>
+                ${navItem?.sub_nav_items && navItem.sub_nav_items.length > 0
+                  ? html`
+                      <ha-formfield>
+                        <ha-switch
+                          type="checkbox"
+                          ?checked=${navItem.unfolded}
+                          @change="${(ev: CustomEvent) =>
+                            this.navItemChanged(ev, index, "unfolded")}"
+                        ></ha-switch>
+                        <label class="mdc-label">Unfolded</label>
+                      </ha-formfield>
+                    `
+                  : ""}
+                <mwc-button
+                  class="add-sub-nav-item"
+                  @click="${(ev: InputEvent) => this.addSubNavItem(ev, index)}"
+                >
+                  <ha-icon .icon=${"mdi:plus"}></ha-icon>
+                </mwc-button>
+                <mwc-button
+                  class="remove-nav-item"
+                  @click="${(ev: InputEvent) => this.removeNavItem(ev, index)}"
+                >
+                  <ha-icon .icon=${"mdi:delete"}></ha-icon>
+                </mwc-button>
+              </div>
+              ${navItem?.sub_nav_items && navItem.sub_nav_items.length > 0
+                ? html`
+                    <div class="sub-nav-items">
+                      <details>
+                        <summary>Sub Navigation Items</summary>
+                        ${navItem?.sub_nav_items?.map(
+                          (subNavItem, subNavItemIndex) => {
+                            return html`
+                              <div
+                                class="sub-nav-item"
+                                index="${subNavItemIndex}"
+                              >
+                                <div class="sub-nav-item-main-config">
+                                  <div class="main-config-row">
+                                    <ha-icon-picker
+                                      label="Icon"
+                                      placeholder="mdi:home"
+                                      class="input-icon-picker"
+                                      .value="${subNavItem.icon || ""}"
+                                      @value-changed="${(ev: CustomEvent) =>
+                                        this.subNavItemChanged(
+                                          ev,
+                                          index,
+                                          subNavItemIndex,
+                                          "icon"
+                                        )}"
+                                    ></ha-icon-picker>
+                                    <ha-textfield
+                                      label="Name"
+                                      placeholder="Home"
+                                      class="input-name"
+                                      .value="${subNavItem.name || ""}"
+                                      @change="${(ev: CustomEvent) =>
+                                        this.subNavItemChanged(
+                                          ev,
+                                          index,
+                                          subNavItemIndex,
+                                          "name"
+                                        )}"
+                                    ></ha-textfield>
+                                  </div>
+                                  <div class="main-config-row">
+                                    <destination-input
+                                      label="Destination"
+                                      class="destination-input"
+                                      placeholder="/lovelace/home"
+                                      .value="${subNavItem.destination || ""}"
+                                      .hass="${this.hass}"
+                                      @change="${(ev: CustomEvent) =>
+                                        this.subNavItemChanged(
+                                          ev,
+                                          index,
+                                          subNavItemIndex,
+                                          "destination"
+                                        )}"
+                                    ></destination-input>
+                                  </div>
+                                </div>
+                                <div class="sub-nav-item-options">
+                                  <ha-formfield>
+                                    <ha-switch
+                                      type="checkbox"
+                                      ?checked=${subNavItem.active}
+                                      @change="${(ev: CustomEvent) =>
+                                        this.subNavItemChanged(
+                                          ev,
+                                          index,
+                                          subNavItemIndex,
+                                          "active"
+                                        )}"
+                                    ></ha-switch>
+                                    <label class="mdc-label">Active</label>
+                                  </ha-formfield>
+                                  <mwc-button
+                                    class="remove-sub-nav-item"
+                                    @click="${(ev: InputEvent) =>
+                                      this.removeSubNavItem(
+                                        ev,
+                                        index,
+                                        subNavItemIndex
+                                      )}"
+                                  >
+                                    <ha-icon .icon=${"mdi:delete"}></ha-icon>
+                                  </mwc-button>
+                                </div>
+                              </div>
+                            `;
+                          }
+                        )}
+                      <details>
+                    </div>
+                    `
+                : ""}
+            </div>
+          `;
+        })}
       </div>
+      <h3>Custom Styles</h3>
       <details class="custom-styles">
         <summary>Custom Styles</summary>
         <details class="custom-colors">
@@ -196,25 +237,25 @@ export class VerticalStackedNavCardEditor extends helpersMixin(LitElement) {
               style="background-color: ${this._config.custom_styles?.colors
                 ?.text?.main || ""};"
             ></div>
-            <paper-input
+            <ha-textfield
               label="Main"
               placeholder="rgba(255, 255, 255, 1)"
               .value="${this._config.custom_styles?.colors?.text?.main || ""}"
               @change="${(ev: InputEvent) =>
                 this.customStyleColorsChanged(ev, "text", "main")}"
-            ></paper-input>
+            ></ha-textfield>
             <div
               class="color-preview text-sub"
               style="background-color: ${this._config.custom_styles?.colors
                 ?.text?.sub || ""};"
             ></div>
-            <paper-input
+            <ha-textfield
               label="Sub"
               placeholder="rgba(255, 255, 255, 0.5)"
               .value="${this._config.custom_styles?.colors?.text?.sub || ""}"
               @change="${(ev: InputEvent) =>
                 this.customStyleColorsChanged(ev, "text", "sub")}"
-            ></paper-input>
+            ></ha-textfield>
           </details>
           <details class="custom-hover">
             <summary>Hover Color</summary>
@@ -223,25 +264,25 @@ export class VerticalStackedNavCardEditor extends helpersMixin(LitElement) {
               style="background-color: ${this._config.custom_styles?.colors
                 ?.hover?.main || ""};"
             ></div>
-            <paper-input
+            <ha-textfield
               label="Main"
               placeholder="rgba(255, 255, 255, 0.1)"
               .value="${this._config.custom_styles?.colors?.hover?.main || ""}"
               @change="${(ev: InputEvent) =>
                 this.customStyleColorsChanged(ev, "hover", "main")}"
-            ></paper-input>
+            ></ha-textfield>
             <div
               class="color-preview hover-sub"
               style="background-color: ${this._config.custom_styles?.colors
                 ?.hover?.sub || ""};"
             ></div>
-            <paper-input
+            <ha-textfield
               label="Sub"
               placeholder="rgba(255, 255, 255, 0.05)"
               .value="${this._config.custom_styles?.colors?.hover?.sub || ""}"
               @change="${(ev: InputEvent) =>
                 this.customStyleColorsChanged(ev, "hover", "sub")}"
-            ></paper-input>
+            ></ha-textfield>
           </details>
           <details class="custom-active">
             <summary>Active Color</summary>
@@ -250,25 +291,25 @@ export class VerticalStackedNavCardEditor extends helpersMixin(LitElement) {
               style="background-color: ${this._config.custom_styles?.colors
                 ?.active?.main || ""};"
             ></div>
-            <paper-input
+            <ha-textfield
               label="Main"
               placeholder="rgba(255, 255, 255, 0.2)"
               .value="${this._config.custom_styles?.colors?.active?.main || ""}"
               @change="${(ev: InputEvent) =>
                 this.customStyleColorsChanged(ev, "active", "main")}"
-            ></paper-input>
+            ></ha-textfield>
             <div
               class="color-preview active-sub"
               style="background-color: ${this._config.custom_styles?.colors
                 ?.active?.sub || ""};"
             ></div>
-            <paper-input
+            <ha-textfield
               label="Sub"
               placeholder="rgba(255, 255, 255, 0.1)"
               .value="${this._config.custom_styles?.colors?.active?.sub || ""}"
               @change="${(ev: InputEvent) =>
                 this.customStyleColorsChanged(ev, "active", "sub")}"
-            ></paper-input>
+            ></ha-textfield>
           </details>
           <details class="custom-background">
             <summary>Background Color</summary>
@@ -277,48 +318,48 @@ export class VerticalStackedNavCardEditor extends helpersMixin(LitElement) {
               style="background-color: ${this._config.custom_styles?.colors
                 ?.background?.main || ""};"
             ></div>
-            <paper-input
+            <ha-textfield
               label="Main"
               placeholder="rgba(0, 0, 0, 0.5)"
               .value="${this._config.custom_styles?.colors?.background?.main ||
               ""}"
               @change="${(ev: InputEvent) =>
                 this.customStyleColorsChanged(ev, "background", "main")}"
-            ></paper-input>
+            ></ha-textfield>
             <div
               class="color-preview background-sub"
               style="background-color: ${this._config.custom_styles?.colors
                 ?.background?.sub || ""};"
             ></div>
-            <paper-input
+            <ha-textfield
               label="Sub"
               placeholder="rgba(0, 0, 0, 0.3)"
               .value="${this._config.custom_styles?.colors?.background?.sub ||
               ""}"
               @change="${(ev: InputEvent) =>
                 this.customStyleColorsChanged(ev, "background", "sub")}"
-            ></paper-input>
+            ></ha-textfield>
           </details>
         </details>
         <details class="custom-fontsize">
           <summary>Fontsize</summary>
           <details class="custom-textsize">
             <summary>Text Size</summary>
-            <paper-input
+            <ha-textfield
               label="Main"
               placeholder="1.2rem"
               .value="${this._config.custom_styles?.font_size?.text?.main ||
               ""}"
               @change="${(ev: InputEvent) =>
                 this.customStyleFontSizeChanged(ev, "text", "main")}"
-            ></paper-input>
-            <paper-input
+            ></ha-textfield>
+            <ha-textfield
               label="Sub"
               placeholder="0.8rem"
               .value="${this._config.custom_styles?.font_size?.text?.sub || ""}"
               @change="${(ev: InputEvent) =>
                 this.customStyleFontSizeChanged(ev, "text", "sub")}"
-            ></paper-input>
+            ></ha-textfield>
           </details>
         </details>
       </details>

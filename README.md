@@ -7,10 +7,9 @@ A custom Home Assistant card for displaying a vertical stacked navigation with o
 
 ## Features
 
-- Define navigation items
-- Set custom icons and names for each link
-- Add sub-navigation to nav items
-- Set active and hover color for nav items and sub-items
+- Visual Editor
+- Sub-Navigation
+- Custom Styles for Main and Sub links
 
 ## Installation
 
@@ -22,7 +21,7 @@ A custom Home Assistant card for displaying a vertical stacked navigation with o
 ### Manual
 
 1. Download the `vertical-stacked-navigation-card.js` file and place it in your `config/www` folder.
-2. Add a reference to `vertical-stacked-nav-card.js` in `Settings -> Dashboard`:
+2. Add a reference to `vertical-stacked-navigation-card.js` in `Settings -> Dashboard`:
 
 ```yaml
 /local/vertical-stacked-navigation-card.js
@@ -57,48 +56,51 @@ nav_items:
 
 ## Options
 
-| **Name**         | **Type** | **Default** | **Description**                                                                           |
-| ---------------- | -------- | ----------- | ----------------------------------------------------------------------------------------- |
-| type             | string   |             | The custom card type, should always be `'custom:vertical-stacked-navigation-card'`        |
-| nav_name         | string   |             | The name of the card header. Set it to 'none' to hide the header                          |
-| nav_items        | list     |             | An list of Items representing each navigation item                                        |
-| custom_styles    | map      | (optional)  | Override default styles. See custom_styles                                                |
+| **Name**      | **Type** | **Default** | **Description**                                                                    |
+| ------------- | -------- | ----------- | ---------------------------------------------------------------------------------- |
+| type          | string   |             | The custom card type, should always be `'custom:vertical-stacked-navigation-card'` |
+| nav_name      | string   |             | The name of the card header. Set it to 'none' to hide the header                   |
+| nav_items     | list     |             | An list of Items representing each navigation item                                 |
+| custom_styles | map      | (optional)  | Override default styles. See custom_styles                                         |
 
 ### Navigation Items
+
 Each navigation item in the nav_items list should contain the following properties:
-| **Name**      | **Type** | **Default** | **Description**                                             |
+| **Name** | **Type** | **Default** | **Description** |
 | ------------- | -------- | ----------- | ----------------------------------------------------------- |
-| icon          | string   |             | The icon for the nav item (e.g., 'mdi:home')                |
-| name          | string   |             | The name of the nav item                                    |
-| destination   | string   | (optional)  | The destination URL for the nav item                        |
-| active        | bool     | false       | Set to `true` if the nav item should be marked as active    |
-| unfolded      | bool     | false       | Set to `true` if the nav item should be unfolded by default |
-| sub_nav_items | list     | (optional)  | An list of items representing each sub-navigation item      |
+| icon | string | | The icon for the nav item (e.g., 'mdi:home') |
+| name | string | | The name of the nav item |
+| destination | string | (optional) | The destination URL for the nav item |
+| active | bool | false | Set to `true` if the nav item should be marked as active |
+| unfolded | bool | false | Set to `true` if the nav item should be unfolded by default |
+| sub_nav_items | list | (optional) | An list of items representing each sub-navigation item |
 
 ### Sub-navigation Items
+
 Each sub-navigation item in the `sub_nav_items` list should contain the following properties:
-| **Name**    | **Type** | **Default** | **Description**                                              |
+| **Name** | **Type** | **Default** | **Description** |
 | ----------- | -------- | ----------- | ------------------------------------------------------------ |
-| icon        | string   |             | The Icon for the sub-nav item (e.g., 'mdi:sofa')             |
-| name        | string   |             | The name of the nav item                                     |
-| destination | string   |             | The destination URL for the nav item                         |
-| active      | bool     | false       | Set to `true` if the sub-nav item should be marked as active |
+| icon | string | | The Icon for the sub-nav item (e.g., 'mdi:sofa') |
+| name | string | | The name of the nav item |
+| destination | string | | The destination URL for the nav item |
+| active | bool | false | Set to `true` if the sub-nav item should be marked as active |
 
 ### custom_styles
+
 See Example for details
-| **Name**    | **Type** | **Default**             | **Description**                                              |
+| **Name** | **Type** | **Default** | **Description** |
 | ----------- | -------- | ----------------------- | ------------------------------------------------------------ |
-| colors      | map      |                         | The Icon for the sub-nav item (e.g., 'mdi:sofa')             |
-| font_size   | map      | `main: 20px, sub: 14px` | The name of the nav item                                     |
+| colors | map | | The Icon for the sub-nav item (e.g., 'mdi:sofa') |
+| font_size | map | `main: 20px, sub: 14px` | The name of the nav item |
 
 #### custom_styles:colors
-| **Name**    | **Type** | **Default**                 | **Description**                                              |
-| ----------- | -------- | --------------------------- | ------------------------------------------------------------ |
-| hover       | map      | `rgba(255, 255, 255, 0.3)`  | The hover-color of main or sub item                          |
-| active      | map      | `rgba(55, 55, 255, 0.5)`    | The active-color of main or sub item                         |
-| text        | map      | `#fff`                      | The text-color of main or sub item                           |
-| background  | map      | `rgba(255, 255, 255, 0.2)`  | The background-color of main or sub item                     |
 
+| **Name**   | **Type** | **Default**                | **Description**                          |
+| ---------- | -------- | -------------------------- | ---------------------------------------- |
+| hover      | map      | `rgba(255, 255, 255, 0.3)` | The hover-color of main or sub item      |
+| active     | map      | `rgba(55, 55, 255, 0.5)`   | The active-color of main or sub item     |
+| text       | map      | `#fff`                     | The text-color of main or sub item       |
+| background | map      | `rgba(255, 255, 255, 0.2)` | The background-color of main or sub item |
 
 ## Example
 
@@ -127,7 +129,7 @@ nav_items:
     destination: /lovelace/climate
 custom_styles:
   colors:
-    hover: 
+    hover:
       main: rgba(15,105,55,0.8)
       sub: rgba(15,105,55,0.8)
     active:

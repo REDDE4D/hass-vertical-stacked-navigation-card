@@ -232,113 +232,141 @@ export class VerticalStackedNavCardEditor extends helpersMixin(LitElement) {
           <summary>Colors</summary>
           <details class="custom-textcolor">
             <summary>Text Color</summary>
-            <div
-              class="color-preview text-main"
-              style="background-color: ${this._config.custom_styles?.colors
-                ?.text?.main || ""};"
-            ></div>
-            <ha-textfield
-              label="Main"
-              placeholder="rgba(255, 255, 255, 1)"
-              .value="${this._config.custom_styles?.colors?.text?.main || ""}"
-              @change="${(ev: InputEvent) =>
-                this.customStyleColorsChanged(ev, "text", "main")}"
-            ></ha-textfield>
-            <div
-              class="color-preview text-sub"
-              style="background-color: ${this._config.custom_styles?.colors
-                ?.text?.sub || ""};"
-            ></div>
-            <ha-textfield
-              label="Sub"
-              placeholder="rgba(255, 255, 255, 0.5)"
-              .value="${this._config.custom_styles?.colors?.text?.sub || ""}"
-              @change="${(ev: InputEvent) =>
-                this.customStyleColorsChanged(ev, "text", "sub")}"
-            ></ha-textfield>
+            <div class="details-row">
+              <div
+                class="color-preview text-main"
+                style="background-color: ${this._config.custom_styles?.colors
+                  ?.text?.main || ""};"
+              ></div>
+              <ha-textfield
+                label="Main"
+                class="custom-style-input"
+                placeholder="rgba(255, 255, 255, 1)"
+                .value="${this._config.custom_styles?.colors?.text?.main || ""}"
+                @change="${(ev: InputEvent) =>
+                  this.customStyleColorsChanged(ev, "text", "main")}"
+              ></ha-textfield>
+            </div>
+            <div class="details-row">
+              <div
+                class="color-preview text-sub"
+                style="background-color: ${this._config.custom_styles?.colors
+                  ?.text?.sub || ""};"
+              ></div>
+              <ha-textfield
+                label="Sub"
+                class="custom-style-input"
+                placeholder="rgba(255, 255, 255, 0.5)"
+                .value="${this._config.custom_styles?.colors?.text?.sub || ""}"
+                @change="${(ev: InputEvent) =>
+                  this.customStyleColorsChanged(ev, "text", "sub")}"
+              ></ha-textfield>
+            </div>
           </details>
+
           <details class="custom-hover">
             <summary>Hover Color</summary>
-            <div
-              class="color-preview hover-main"
-              style="background-color: ${this._config.custom_styles?.colors
-                ?.hover?.main || ""};"
-            ></div>
-            <ha-textfield
-              label="Main"
-              placeholder="rgba(255, 255, 255, 0.1)"
-              .value="${this._config.custom_styles?.colors?.hover?.main || ""}"
-              @change="${(ev: InputEvent) =>
-                this.customStyleColorsChanged(ev, "hover", "main")}"
-            ></ha-textfield>
-            <div
-              class="color-preview hover-sub"
-              style="background-color: ${this._config.custom_styles?.colors
-                ?.hover?.sub || ""};"
-            ></div>
-            <ha-textfield
-              label="Sub"
-              placeholder="rgba(255, 255, 255, 0.05)"
-              .value="${this._config.custom_styles?.colors?.hover?.sub || ""}"
-              @change="${(ev: InputEvent) =>
-                this.customStyleColorsChanged(ev, "hover", "sub")}"
-            ></ha-textfield>
+            <div class="details-row">
+              <div
+                class="color-preview hover-main"
+                style="background-color: ${this._config.custom_styles?.colors
+                  ?.hover?.main || ""};"
+              ></div>
+              <ha-textfield
+                label="Main"
+                class="custom-style-input"
+                placeholder="rgba(255, 255, 255, 0.1)"
+                .value="${this._config.custom_styles?.colors?.hover?.main ||
+                ""}"
+                @change="${(ev: InputEvent) =>
+                  this.customStyleColorsChanged(ev, "hover", "main")}"
+              ></ha-textfield>
+            </div>
+            <div class="details-row">
+              <div
+                class="color-preview hover-sub"
+                style="background-color: ${this._config.custom_styles?.colors
+                  ?.hover?.sub || ""};"
+              ></div>
+              <ha-textfield
+                label="Sub"
+                class="custom-style-input"
+                placeholder="rgba(255, 255, 255, 0.05)"
+                .value="${this._config.custom_styles?.colors?.hover?.sub || ""}"
+                @change="${(ev: InputEvent) =>
+                  this.customStyleColorsChanged(ev, "hover", "sub")}"
+              ></ha-textfield>
+            </div>
           </details>
           <details class="custom-active">
             <summary>Active Color</summary>
-            <div
-              class="color-preview active-main"
-              style="background-color: ${this._config.custom_styles?.colors
-                ?.active?.main || ""};"
-            ></div>
-            <ha-textfield
-              label="Main"
-              placeholder="rgba(255, 255, 255, 0.2)"
-              .value="${this._config.custom_styles?.colors?.active?.main || ""}"
-              @change="${(ev: InputEvent) =>
-                this.customStyleColorsChanged(ev, "active", "main")}"
-            ></ha-textfield>
-            <div
-              class="color-preview active-sub"
-              style="background-color: ${this._config.custom_styles?.colors
-                ?.active?.sub || ""};"
-            ></div>
-            <ha-textfield
-              label="Sub"
-              placeholder="rgba(255, 255, 255, 0.1)"
-              .value="${this._config.custom_styles?.colors?.active?.sub || ""}"
-              @change="${(ev: InputEvent) =>
-                this.customStyleColorsChanged(ev, "active", "sub")}"
-            ></ha-textfield>
+            <div class="details-row">
+              <div
+                class="color-preview active-main"
+                style="background-color: ${this._config.custom_styles?.colors
+                  ?.active?.main || ""};"
+              ></div>
+              <ha-textfield
+                label="Main"
+                class="custom-style-input"
+                placeholder="rgba(255, 255, 255, 0.2)"
+                .value="${this._config.custom_styles?.colors?.active?.main ||
+                ""}"
+                @change="${(ev: InputEvent) =>
+                  this.customStyleColorsChanged(ev, "active", "main")}"
+              ></ha-textfield>
+            </div>
+            <div class="details-row">
+              <div
+                class="color-preview active-sub"
+                style="background-color: ${this._config.custom_styles?.colors
+                  ?.active?.sub || ""};"
+              ></div>
+              <ha-textfield
+                label="Sub"
+                class="custom-style-input"
+                placeholder="rgba(255, 255, 255, 0.1)"
+                .value="${this._config.custom_styles?.colors?.active?.sub ||
+                ""}"
+                @change="${(ev: InputEvent) =>
+                  this.customStyleColorsChanged(ev, "active", "sub")}"
+              ></ha-textfield>
+            </div>
           </details>
           <details class="custom-background">
             <summary>Background Color</summary>
-            <div
-              class="color-preview background-main"
-              style="background-color: ${this._config.custom_styles?.colors
-                ?.background?.main || ""};"
-            ></div>
-            <ha-textfield
-              label="Main"
-              placeholder="rgba(0, 0, 0, 0.5)"
-              .value="${this._config.custom_styles?.colors?.background?.main ||
-              ""}"
-              @change="${(ev: InputEvent) =>
-                this.customStyleColorsChanged(ev, "background", "main")}"
-            ></ha-textfield>
-            <div
-              class="color-preview background-sub"
-              style="background-color: ${this._config.custom_styles?.colors
-                ?.background?.sub || ""};"
-            ></div>
-            <ha-textfield
-              label="Sub"
-              placeholder="rgba(0, 0, 0, 0.3)"
-              .value="${this._config.custom_styles?.colors?.background?.sub ||
-              ""}"
-              @change="${(ev: InputEvent) =>
-                this.customStyleColorsChanged(ev, "background", "sub")}"
-            ></ha-textfield>
+            <div class="details-row">
+              <div
+                class="color-preview background-main"
+                style="background-color: ${this._config.custom_styles?.colors
+                  ?.background?.main || ""};"
+              ></div>
+              <ha-textfield
+                label="Main"
+                class="custom-style-input"
+                placeholder="rgba(0, 0, 0, 0.5)"
+                .value="${this._config.custom_styles?.colors?.background
+                  ?.main || ""}"
+                @change="${(ev: InputEvent) =>
+                  this.customStyleColorsChanged(ev, "background", "main")}"
+              ></ha-textfield>
+            </div>
+            <div class="details-row">
+              <div
+                class="color-preview background-sub"
+                style="background-color: ${this._config.custom_styles?.colors
+                  ?.background?.sub || ""};"
+              ></div>
+              <ha-textfield
+                label="Sub"
+                class="custom-style-input"
+                placeholder="rgba(0, 0, 0, 0.3)"
+                .value="${this._config.custom_styles?.colors?.background?.sub ||
+                ""}"
+                @change="${(ev: InputEvent) =>
+                  this.customStyleColorsChanged(ev, "background", "sub")}"
+              ></ha-textfield>
+            </div>
           </details>
         </details>
         <details class="custom-fontsize">

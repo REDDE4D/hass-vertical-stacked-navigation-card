@@ -244,20 +244,21 @@ const editorStyles = css`
     border: 1px solid var(--divider-color);
   }
 
-  paper-input {
-    --paper-input-container-input-color: var(--primary-text-color);
-    --paper-input-container-color: var(--secondary-text-color);
-    --paper-input-container-focus-color: var(--primary-color);
-    --paper-input-container-invalid-color: var(--error-color);
+  .details-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
   }
 
   .color-preview {
-    display: inline-block;
-    width: 24px;
-    height: 24px;
-    border: 1px solid #ccc;
-    margin-right: 8px;
-    vertical-align: middle;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+  }
+
+  .custon-style-input {
+    width: 100%;
   }
 `;
 

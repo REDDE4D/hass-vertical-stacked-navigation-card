@@ -1,7 +1,10 @@
 {
   "name": "hass-vertical-stacked-navigation-card",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Lovelace Vertical Stacked Navigation Card",
+  "repository": "git@github.com:REDDE4D/hass-vertical-stacked-navigation-card.git",
+  "author": "REDDE4D",
+  "license": "MIT",
   "keywords": [
     "home-assistant",
     "homeassistant",
@@ -10,7 +13,7 @@
     "lovelace",
     "custom-cards"
   ],
-  "main": "dist/register-card.js",
+  "main": "dist/vertical-stacked-navigation-card.js",
   "devDependencies": {
     "custom-card-helpers": "^1.9.0",
     "hass-taste-test": "^0.2.1",

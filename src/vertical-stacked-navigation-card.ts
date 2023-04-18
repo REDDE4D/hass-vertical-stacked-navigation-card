@@ -68,7 +68,9 @@ export class VerticalStackedNavCard extends LitElement {
         <div class="nav-item-container">
           <a
             href="${item.sub_nav_items ? "#" : item.destination}"
-            class="nav-item ${isActive} nav-item-${index}"
+            class="nav-item ${isActive} ${item.unfolded
+              ? "unfolded"
+              : ""} nav-item-${index}"
             @click=${item.sub_nav_items ? this._toggleSubnav : null}
           >
             <ha-icon icon="${item.icon}"></ha-icon>
@@ -155,8 +157,14 @@ export class VerticalStackedNavCard extends LitElement {
         }
 
         if (font_size) {
-          this.style.setProperty("--main-font-size", font_size.main ?? null);
-          this.style.setProperty("--sub-font-size", font_size.sub ?? null);
+          this.style.setProperty(
+            "--main-font-size",
+            font_size.text?.main ?? null
+          );
+          this.style.setProperty(
+            "--sub-font-size",
+            font_size.text?.sub ?? null
+          );
         }
       }
     }
@@ -167,6 +175,7 @@ export class VerticalStackedNavCard extends LitElement {
       throw new Error("You need to define nav_items");
     }
     this.config = config;
+    this.requestUpdate();
   }
 
   public getCardSize(): number {

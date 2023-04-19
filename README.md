@@ -1,4 +1,7 @@
 [![hacs_badge](https://img.shields.io/badge/HACS-Custom-41BDF5.svg?style=for-the-badge)](https://github.com/hacs/integration)
+![GitHub package.json version](https://img.shields.io/github/package-json/v/redde4d/hass-vertical-stacked-navigation-card?style=for-the-badge)
+![GitHub last commit](https://img.shields.io/github/last-commit/redde4d/hass-vertical-stacked-navigation-card?style=for-the-badge)
+![GitHub issues](https://img.shields.io/github/issues/redde4d/hass-vertical-stacked-navigation-card?style=for-the-badge)
 
 # Vertical Stacked Navigation Card for Home Assistant
 

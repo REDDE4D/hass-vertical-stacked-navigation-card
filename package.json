@@ -1,6 +1,6 @@
 {
   "name": "hass-vertical-stacked-navigation-card",
-  "version": "0.0.6",
+  "version": "1.0.0",
   "description": "Lovelace Vertical Stacked Navigation Card",
   "repository": "git@github.com:REDDE4D/hass-vertical-stacked-navigation-card.git",
   "author": "REDDE4D",

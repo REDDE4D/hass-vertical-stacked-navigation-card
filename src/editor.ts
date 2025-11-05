@@ -217,7 +217,7 @@ export class VerticalStackedNavCardEditor extends helpersMixin(LitElement) {
                             `;
                           }
                         )}
-                      <details>
+                      </details>
                     </div>
                     `
                 : ""}

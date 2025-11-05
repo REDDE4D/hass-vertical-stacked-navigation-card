@@ -5,11 +5,15 @@ import {
   PropertyValues,
   CSSResultGroup,
 } from "lit";
+import { property } from "lit/decorators.js";
+import { HomeAssistant } from "custom-card-helpers";
 import { styles } from "./styles";
 import { Config } from "./types";
 import "./editor";
 
 export class VerticalStackedNavCard extends LitElement {
+  @property({ attribute: false }) public hass?: HomeAssistant;
+
   private content: HTMLElement | null = null;
   private isContentSet: boolean = false;
   private config!: Config;
@@ -167,6 +171,7 @@ export class VerticalStackedNavCard extends LitElement {
           );
         }
       }
+      this.isContentSet = true;
     }
   }
 
@@ -214,9 +219,25 @@ customElements.define(
   "vertical-stacked-navigation-card",
   VerticalStackedNavCard
 );
-(window as any).customCards = (window as any).customCards || [];
-(window as any).customCards.push({
+
+// Register card with Home Assistant
+declare global {
+  interface Window {
+    customCards: Array<{
+      type: string;
+      name: string;
+      description: string;
+      preview?: boolean;
+      documentationURL?: string;
+    }>;
+  }
+}
+
+window.customCards = window.customCards || [];
+window.customCards.push({
   type: "vertical-stacked-navigation-card",
   name: "Vertical Stacked Navigation Card",
-  description: "A vertical stacked navigation card",
+  description: "A custom card for displaying a vertical stacked navigation with optional sub-navigation",
+  preview: true,
+  documentationURL: "https://github.com/REDDE4D/hass-vertical-stacked-navigation-card",
 });

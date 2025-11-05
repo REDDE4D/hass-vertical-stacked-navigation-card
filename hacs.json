@@ -1,5 +1,6 @@
 {
   "name": "Vertical Stacked Navigation Card",
   "render_readme": true,
-  "filename": "vertical-stacked-navigation-card.js"
+  "filename": "vertical-stacked-navigation-card.js",
+  "homeassistant": "2021.3.0"
 }

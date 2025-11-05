@@ -6,8 +6,19 @@ import {
   SubColorType,
   FontSizeType,
   SubFontSizeType,
+  FontWeightType,
+  FontFamilyType,
+  BorderRadiusType,
+  PaddingType,
+  PaddingSubType,
+  SpacingType,
+  BorderType,
+  BoxShadowType,
+  HeaderPropertyType,
+  NavItem,
+  SubNavItem,
 } from "./types";
-import { LitElement } from "lit"; // Add this import
+import { LitElement } from "lit";
 
 class ConfigChangedEvent extends Event {
   detail: { config: Config };
@@ -27,20 +38,25 @@ export function helpersMixin<TBase extends Constructor<LitElement>>(
   return class extends Base {
     _config?: Config;
 
+    private cloneConfig(): Config {
+      return JSON.parse(JSON.stringify(this._config));
+    }
+
+    private dispatchConfigChanged(config: Config): void {
+      this._config = config;
+      const event = new ConfigChangedEvent(config);
+      this.dispatchEvent(event);
+    }
+
     navNameChanged(ev: InputEvent) {
       if (!this._config || !ev.target) {
         return;
       }
 
       const target = ev.target as HTMLInputElement;
-      const _config = Object.assign({}, this._config);
-
-      _config.nav_name = target.value;
-      this._config = _config;
-
-      const event = new ConfigChangedEvent(_config);
-
-      this.dispatchEvent(event);
+      const config = this.cloneConfig();
+      config.nav_name = target.value;
+      this.dispatchConfigChanged(config);
     }
 
     addNavItem(ev: InputEvent) {
@@ -48,23 +64,19 @@ export function helpersMixin<TBase extends Constructor<LitElement>>(
         return;
       }
 
-      const _config = Object.assign({}, this._config);
+      const config = this.cloneConfig();
 
-      if (!_config.nav_items) {
-        _config.nav_items = [];
+      if (!config.nav_items) {
+        config.nav_items = [];
       }
 
-      _config.nav_items.push({
+      config.nav_items.push({
         name: "New Item",
         icon: "mdi:home",
         destination: "",
       });
 
-      this._config = _config;
-
-      const event = new ConfigChangedEvent(_config);
-
-      this.dispatchEvent(event);
+      this.dispatchConfigChanged(config);
     }
 
     removeNavItem(ev: InputEvent, index: number) {
@@ -72,16 +84,9 @@ export function helpersMixin<TBase extends Constructor<LitElement>>(
         return;
       }
 
-      const target = ev.target as HTMLElement;
-      const _config = Object.assign({}, this._config);
-
-      _config.nav_items.splice(index, 1);
-
-      this._config = _config;
-
-      const event = new ConfigChangedEvent(_config);
-
-      this.dispatchEvent(event);
+      const config = this.cloneConfig();
+      config.nav_items.splice(index, 1);
+      this.dispatchConfigChanged(config);
     }
 
     navItemChanged(ev: CustomEvent, index: number, property: NavItemProperty) {
@@ -90,9 +95,9 @@ export function helpersMixin<TBase extends Constructor<LitElement>>(
       }
 
       const target = ev.target as HTMLInputElement;
-      const _config = Object.assign({}, this._config);
+      const config = this.cloneConfig();
 
-      let newValue;
+      let newValue: string | boolean;
       if (ev.type === "value-changed") {
         newValue = ev.detail.value;
       } else {
@@ -100,16 +105,12 @@ export function helpersMixin<TBase extends Constructor<LitElement>>(
       }
 
       if (property === "active" || property === "unfolded") {
-        (_config.nav_items[index] as any)[property] = target.checked;
+        config.nav_items[index][property] = target.checked;
       } else {
-        (_config.nav_items[index] as any)[property] = newValue;
+        (config.nav_items[index][property] as string) = newValue as string;
       }
 
-      this._config = _config;
-
-      const event = new ConfigChangedEvent(_config);
-
-      this.dispatchEvent(event);
+      this.dispatchConfigChanged(config);
     }
 
     addSubNavItem(ev: InputEvent, parentIndex: number) {
@@ -117,10 +118,9 @@ export function helpersMixin<TBase extends Constructor<LitElement>>(
         return;
       }
 
-      const target = ev.target as HTMLInputElement;
-      const _config = Object.assign({}, this._config);
+      const config = this.cloneConfig();
+      const navItem = config.nav_items[parentIndex];
 
-      const navItem = _config.nav_items[parentIndex];
       if (navItem) {
         if (!navItem.sub_nav_items) {
           navItem.sub_nav_items = [];
@@ -129,14 +129,10 @@ export function helpersMixin<TBase extends Constructor<LitElement>>(
         navItem.sub_nav_items.push({
           name: "New Sub Item",
           icon: "mdi:home",
-          destination: "lovelace",
+          destination: "/lovelace/0",
         });
 
-        this._config = _config;
-
-        const event = new ConfigChangedEvent(_config);
-
-        this.dispatchEvent(event);
+        this.dispatchConfigChanged(config);
       }
     }
 
@@ -145,22 +141,17 @@ export function helpersMixin<TBase extends Constructor<LitElement>>(
         return;
       }
 
-      const _config = Object.assign({}, this._config);
-
-      const subNavItems = _config.nav_items[parentIndex]?.sub_nav_items;
+      const config = this.cloneConfig();
+      const subNavItems = config.nav_items[parentIndex]?.sub_nav_items;
 
       if (subNavItems) {
         subNavItems.splice(subIndex, 1);
 
         if (subNavItems.length === 0) {
-          delete _config.nav_items[parentIndex].sub_nav_items;
+          delete config.nav_items[parentIndex].sub_nav_items;
         }
 
-        this._config = _config;
-
-        const event = new ConfigChangedEvent(_config);
-
-        this.dispatchEvent(event);
+        this.dispatchConfigChanged(config);
       }
     }
 
@@ -175,13 +166,11 @@ export function helpersMixin<TBase extends Constructor<LitElement>>(
       }
 
       const target = ev.target as HTMLInputElement;
-      const _config = Object.assign({}, this._config);
-
-      const subNavItem =
-        _config.nav_items[parentIndex]?.sub_nav_items?.[subIndex];
+      const config = this.cloneConfig();
+      const subNavItem = config.nav_items[parentIndex]?.sub_nav_items?.[subIndex];
 
       if (subNavItem) {
-        let newValue;
+        let newValue: string | boolean;
         if (ev.type === "value-changed") {
           newValue = ev.detail.value;
         } else {
@@ -189,15 +178,12 @@ export function helpersMixin<TBase extends Constructor<LitElement>>(
         }
 
         if (property === "active") {
-          (subNavItem as any)[property] = target.checked;
+          subNavItem[property] = target.checked;
         } else {
-          (subNavItem as any)[property] = newValue;
+          (subNavItem[property] as string) = newValue as string;
         }
-        this._config = _config;
 
-        const event = new ConfigChangedEvent(_config);
-
-        this.dispatchEvent(event);
+        this.dispatchConfigChanged(config);
       }
     }
 
@@ -211,32 +197,27 @@ export function helpersMixin<TBase extends Constructor<LitElement>>(
       }
 
       const target = ev.target as HTMLInputElement;
-      const _config = Object.assign({}, this._config);
+      const config = this.cloneConfig();
 
-      if (!_config.custom_styles) {
-        _config.custom_styles = {};
+      if (!config.custom_styles) {
+        config.custom_styles = {};
       }
 
-      if (!_config.custom_styles.colors) {
-        _config.custom_styles.colors = {};
+      if (!config.custom_styles.colors) {
+        config.custom_styles.colors = {};
       }
 
-      if (!_config.custom_styles.colors[colorType]) {
-        _config.custom_styles.colors[colorType] = {};
+      if (!config.custom_styles.colors[colorType]) {
+        config.custom_styles.colors[colorType] = {};
       }
 
       if (target.value) {
-        (_config.custom_styles.colors[colorType] as any)[subColorType] =
-          target.value;
+        config.custom_styles.colors[colorType]![subColorType] = target.value;
       } else {
-        delete (_config.custom_styles.colors[colorType] as any)[subColorType];
+        delete config.custom_styles.colors[colorType]![subColorType];
       }
 
-      this._config = _config;
-
-      const event = new ConfigChangedEvent(_config);
-
-      this.dispatchEvent(event);
+      this.dispatchConfigChanged(config);
       this.requestUpdate();
     }
 
@@ -250,35 +231,192 @@ export function helpersMixin<TBase extends Constructor<LitElement>>(
       }
 
       const target = ev.target as HTMLInputElement;
-      const _config = Object.assign({}, this._config);
+      const config = this.cloneConfig();
 
-      if (!_config.custom_styles) {
-        _config.custom_styles = {};
+      if (!config.custom_styles) {
+        config.custom_styles = {};
       }
 
-      if (!_config.custom_styles.font_size) {
-        _config.custom_styles.font_size = {};
+      if (!config.custom_styles.font_size) {
+        config.custom_styles.font_size = {};
       }
 
-      if (!_config.custom_styles.font_size[fontSizeType]) {
-        _config.custom_styles.font_size[fontSizeType] = {};
+      if (!config.custom_styles.font_size[fontSizeType]) {
+        config.custom_styles.font_size[fontSizeType] = {};
       }
 
       if (target.value) {
-        (_config.custom_styles.font_size[fontSizeType] as any)[
-          subFontSizeType
-        ] = target.value;
+        config.custom_styles.font_size[fontSizeType]![subFontSizeType] = target.value;
       } else {
-        delete (_config.custom_styles.font_size[fontSizeType] as any)[
-          subFontSizeType
-        ];
+        delete config.custom_styles.font_size[fontSizeType]![subFontSizeType];
       }
 
-      this._config = _config;
+      this.dispatchConfigChanged(config);
+    }
 
-      const event = new ConfigChangedEvent(_config);
+    customStyleFontWeightChanged(
+      ev: InputEvent,
+      fontWeightType: FontWeightType
+    ) {
+      if (!this._config || !ev.target) {
+        return;
+      }
 
-      this.dispatchEvent(event);
+      const target = ev.target as HTMLInputElement;
+      const config = this.cloneConfig();
+
+      if (!config.custom_styles) {
+        config.custom_styles = {};
+      }
+
+      if (!config.custom_styles.font_weight) {
+        config.custom_styles.font_weight = {};
+      }
+
+      if (target.value) {
+        config.custom_styles.font_weight[fontWeightType] = target.value;
+      } else {
+        delete config.custom_styles.font_weight[fontWeightType];
+      }
+
+      this.dispatchConfigChanged(config);
+    }
+
+    customStyleFontFamilyChanged(
+      ev: InputEvent,
+      fontFamilyType: FontFamilyType
+    ) {
+      if (!this._config || !ev.target) {
+        return;
+      }
+
+      const target = ev.target as HTMLInputElement;
+      const config = this.cloneConfig();
+
+      if (!config.custom_styles) {
+        config.custom_styles = {};
+      }
+
+      if (!config.custom_styles.font_family) {
+        config.custom_styles.font_family = {};
+      }
+
+      if (target.value) {
+        config.custom_styles.font_family[fontFamilyType] = target.value;
+      } else {
+        delete config.custom_styles.font_family[fontFamilyType];
+      }
+
+      this.dispatchConfigChanged(config);
+    }
+
+    customStyleBorderRadiusChanged(
+      ev: InputEvent,
+      borderRadiusType: BorderRadiusType
+    ) {
+      if (!this._config || !ev.target) {
+        return;
+      }
+
+      const target = ev.target as HTMLInputElement;
+      const config = this.cloneConfig();
+
+      if (!config.custom_styles) {
+        config.custom_styles = {};
+      }
+
+      if (!config.custom_styles.border_radius) {
+        config.custom_styles.border_radius = {};
+      }
+
+      if (target.value) {
+        config.custom_styles.border_radius[borderRadiusType] = target.value;
+      } else {
+        delete config.custom_styles.border_radius[borderRadiusType];
+      }
+
+      this.dispatchConfigChanged(config);
+    }
+
+    customStyleBorderChanged(
+      ev: InputEvent,
+      borderType: BorderType
+    ) {
+      if (!this._config || !ev.target) {
+        return;
+      }
+
+      const target = ev.target as HTMLInputElement;
+      const config = this.cloneConfig();
+
+      if (!config.custom_styles) {
+        config.custom_styles = {};
+      }
+
+      if (!config.custom_styles.border) {
+        config.custom_styles.border = {};
+      }
+
+      if (target.value) {
+        config.custom_styles.border[borderType] = target.value;
+      } else {
+        delete config.custom_styles.border[borderType];
+      }
+
+      this.dispatchConfigChanged(config);
+    }
+
+    customStyleBoxShadowChanged(
+      ev: InputEvent,
+      boxShadowType: BoxShadowType
+    ) {
+      if (!this._config || !ev.target) {
+        return;
+      }
+
+      const target = ev.target as HTMLInputElement;
+      const config = this.cloneConfig();
+
+      if (!config.custom_styles) {
+        config.custom_styles = {};
+      }
+
+      if (!config.custom_styles.box_shadow) {
+        config.custom_styles.box_shadow = {};
+      }
+
+      if (target.value) {
+        config.custom_styles.box_shadow[boxShadowType] = target.value;
+      } else {
+        delete config.custom_styles.box_shadow[boxShadowType];
+      }
+
+      this.dispatchConfigChanged(config);
+    }
+
+    customStyleTransitionDurationChanged(ev: InputEvent) {
+      if (!this._config || !ev.target) {
+        return;
+      }
+
+      const target = ev.target as HTMLInputElement;
+      const config = this.cloneConfig();
+
+      if (!config.custom_styles) {
+        config.custom_styles = {};
+      }
+
+      if (!config.custom_styles.transitions) {
+        config.custom_styles.transitions = {};
+      }
+
+      if (target.value) {
+        config.custom_styles.transitions.duration = target.value;
+      } else {
+        delete config.custom_styles.transitions.duration;
+      }
+
+      this.dispatchConfigChanged(config);
     }
   };
 }

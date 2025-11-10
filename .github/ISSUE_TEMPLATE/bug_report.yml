@@ -1,0 +1,120 @@
+name: Bug Report
+description: Report a bug or issue with the Vertical Stacked Navigation Card
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this bug report!
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Bug Description
+      description: A clear and concise description of what the bug is.
+      placeholder: Tell us what went wrong
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected-behavior
+    attributes:
+      label: Expected Behavior
+      description: What did you expect to happen?
+      placeholder: Describe the expected behavior
+    validations:
+      required: true
+
+  - type: textarea
+    id: card-config
+    attributes:
+      label: Card Configuration
+      description: Please provide your card configuration (YAML)
+      placeholder: |
+        type: custom:vertical-stacked-navigation-card
+        items:
+          - name: Home
+            icon: mdi:home
+            path: /lovelace/0
+      render: yaml
+    validations:
+      required: true
+
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: Screenshots
+      description: If this is a visual issue, please add screenshots to help explain the problem
+      placeholder: Drag and drop images here or paste image URLs
+    validations:
+      required: false
+
+  - type: input
+    id: card-version
+    attributes:
+      label: Card Version
+      description: What version of the Vertical Stacked Navigation Card are you using?
+      placeholder: "e.g., 1.0.0"
+    validations:
+      required: true
+
+  - type: input
+    id: ha-version
+    attributes:
+      label: Home Assistant Version
+      description: What version of Home Assistant are you running?
+      placeholder: "e.g., 2024.11.0"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: browser
+    attributes:
+      label: Browser
+      description: Which browser are you experiencing the issue on?
+      options:
+        - Chrome
+        - Firefox
+        - Safari
+        - Edge
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: browser-logs
+    attributes:
+      label: Browser Console Logs
+      description: |
+        Please provide any browser console logs related to the card.
+        To access browser console:
+        - Chrome/Edge: Press F12 or Ctrl+Shift+J (Cmd+Option+J on Mac)
+        - Firefox: Press F12 or Ctrl+Shift+K (Cmd+Option+K on Mac)
+        - Safari: Enable Developer menu first, then press Cmd+Option+C
+      placeholder: Paste browser console errors/warnings here
+      render: shell
+    validations:
+      required: false
+
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional Context
+      description: Add any other context about the problem here
+      placeholder: Any additional information that might be helpful
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Checklist
+      description: Please confirm the following
+      options:
+        - label: I have checked that I'm using the latest version of the card
+          required: true
+        - label: I have searched existing issues to ensure this is not a duplicate
+          required: true
+        - label: I have cleared my browser cache and the issue persists
+          required: false

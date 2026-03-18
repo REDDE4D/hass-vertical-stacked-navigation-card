@@ -59,6 +59,17 @@ export function helpersMixin<TBase extends Constructor<LitElement>>(
       this.dispatchConfigChanged(config);
     }
 
+    autoActiveChanged(ev: Event) {
+      if (!this._config || !ev.target) {
+        return;
+      }
+
+      const target = ev.target as HTMLInputElement;
+      const config = this.cloneConfig();
+      config.auto_active = target.checked;
+      this.dispatchConfigChanged(config);
+    }
+
     addNavItem(ev: InputEvent) {
       if (!this._config || !ev.target) {
         return;
@@ -108,6 +119,63 @@ export function helpersMixin<TBase extends Constructor<LitElement>>(
         config.nav_items[index][property] = target.checked;
       } else {
         (config.nav_items[index][property] as string) = newValue as string;
+      }
+
+      this.dispatchConfigChanged(config);
+    }
+
+    navItemVisibilityChanged(ev: InputEvent, index: number, field: "entity" | "state" | "state_not") {
+      if (!this._config || !ev.target) {
+        return;
+      }
+
+      const target = ev.target as HTMLInputElement;
+      const config = this.cloneConfig();
+
+      if (!config.nav_items[index].visibility) {
+        config.nav_items[index].visibility = { entity: "" };
+      }
+
+      if (target.value) {
+        config.nav_items[index].visibility![field] = target.value;
+      } else {
+        delete config.nav_items[index].visibility![field];
+        if (!config.nav_items[index].visibility!.entity) {
+          delete config.nav_items[index].visibility;
+        }
+      }
+
+      this.dispatchConfigChanged(config);
+    }
+
+    navItemTapActionChanged(ev: InputEvent, index: number, field: string) {
+      if (!this._config || !ev.target) {
+        return;
+      }
+
+      const target = ev.target as HTMLInputElement;
+      const config = this.cloneConfig();
+
+      if (!config.nav_items[index].tap_action) {
+        config.nav_items[index].tap_action = { action: "navigate" };
+      }
+
+      const tapAction = config.nav_items[index].tap_action!;
+
+      if (field === "action") {
+        tapAction.action = target.value as any;
+      } else if (field === "navigation_path") {
+        tapAction.navigation_path = target.value || undefined;
+      } else if (field === "url_path") {
+        tapAction.url_path = target.value || undefined;
+      } else if (field === "service") {
+        tapAction.service = target.value || undefined;
+      } else if (field === "entity") {
+        tapAction.entity = target.value || undefined;
+      }
+
+      if (tapAction.action === "navigate" && !tapAction.navigation_path && !tapAction.url_path && !tapAction.service && !tapAction.entity) {
+        delete config.nav_items[index].tap_action;
       }
 
       this.dispatchConfigChanged(config);
@@ -181,6 +249,33 @@ export function helpersMixin<TBase extends Constructor<LitElement>>(
           subNavItem[property] = target.checked;
         } else {
           (subNavItem[property] as string) = newValue as string;
+        }
+
+        this.dispatchConfigChanged(config);
+      }
+    }
+
+    subNavItemVisibilityChanged(ev: InputEvent, parentIndex: number, subIndex: number, field: "entity" | "state" | "state_not") {
+      if (!this._config || !ev.target) {
+        return;
+      }
+
+      const target = ev.target as HTMLInputElement;
+      const config = this.cloneConfig();
+      const subNavItem = config.nav_items[parentIndex]?.sub_nav_items?.[subIndex];
+
+      if (subNavItem) {
+        if (!subNavItem.visibility) {
+          subNavItem.visibility = { entity: "" };
+        }
+
+        if (target.value) {
+          subNavItem.visibility![field] = target.value;
+        } else {
+          delete subNavItem.visibility![field];
+          if (!subNavItem.visibility!.entity) {
+            delete subNavItem.visibility;
+          }
         }
 
         this.dispatchConfigChanged(config);

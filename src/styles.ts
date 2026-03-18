@@ -58,7 +58,7 @@ const styles = css`
   .nav-item ha-icon {
     --mdc-icon-size: var(--main-icon-size, 24px);
     margin-right: var(--main-icon-spacing, 12px);
-    color: var(--main-icon-color, currentColor);
+    color: var(--item-icon-color, var(--main-icon-color, currentColor));
   }
 
   .unfolded {
@@ -67,7 +67,6 @@ const styles = css`
   }
 
   .sub-nav-items {
-    display: none;
     background-color: var(
       --sub-container-background-color,
       var(--card-background-color, transparent)
@@ -75,6 +74,15 @@ const styles = css`
     border-bottom-left-radius: var(--main-border-radius, 8px);
     border-bottom-right-radius: var(--main-border-radius, 8px);
     overflow: hidden;
+    max-height: 0;
+    opacity: 0;
+    transition: max-height var(--transition-duration, 0.2s) ease,
+                opacity var(--transition-duration, 0.2s) ease;
+  }
+
+  .sub-nav-items.expanded {
+    max-height: 500px;
+    opacity: 1;
   }
 
   .sub-item {
@@ -105,7 +113,7 @@ const styles = css`
   .sub-item ha-icon {
     --mdc-icon-size: var(--sub-icon-size, 20px);
     margin-right: var(--sub-icon-spacing, 12px);
-    color: var(--sub-icon-color, currentColor);
+    color: var(--item-icon-color, var(--sub-icon-color, currentColor));
   }
 
   .sub-item:first-child {
@@ -167,6 +175,23 @@ const styles = css`
     font-weight: var(--sub-active-font-weight, 500);
     box-shadow: var(--sub-active-box-shadow, var(--sub-box-shadow, none));
   }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 20px;
+    height: 20px;
+    padding: 0 6px;
+    border-radius: 10px;
+    background-color: var(--primary-color, #03a9f4);
+    color: var(--text-primary-color, #fff);
+    font-size: 11px;
+    font-weight: 600;
+    line-height: 1;
+    margin-left: 8px;
+    flex-shrink: 0;
+  }
 `;
 
 const editorStyles = css`
@@ -226,8 +251,8 @@ const editorStyles = css`
   }
 
   .nav-item-options {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr) auto;
+    display: flex;
+    flex-wrap: wrap;
     align-items: center;
     gap: 8px;
   }
@@ -392,6 +417,21 @@ const editorStyles = css`
     font-size: 12px;
     margin-top: 4px;
     font-style: italic;
+  }
+
+  .visibility-config,
+  .tap-action-config {
+    margin-top: 8px;
+    padding: 8px;
+    border: 1px dashed var(--divider-color);
+    border-radius: 6px;
+  }
+
+  .visibility-config h4,
+  .tap-action-config h4 {
+    margin: 0 0 8px 0;
+    font-size: 13px;
+    color: var(--secondary-text-color);
   }
 `;
 

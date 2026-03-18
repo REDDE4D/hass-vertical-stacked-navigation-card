@@ -5,6 +5,10 @@ export interface NavItem {
   active?: boolean;
   sub_nav_items?: SubNavItem[];
   unfolded?: boolean;
+  icon_color?: string;
+  entity?: string;
+  visibility?: VisibilityCondition;
+  tap_action?: TapAction;
 }
 
 export interface SubNavItem {
@@ -12,6 +16,25 @@ export interface SubNavItem {
   icon: string;
   destination: string;
   active?: boolean;
+  icon_color?: string;
+  entity?: string;
+  visibility?: VisibilityCondition;
+  tap_action?: TapAction;
+}
+
+export interface TapAction {
+  action: "navigate" | "url" | "call-service" | "more-info" | "none";
+  navigation_path?: string;
+  url_path?: string;
+  service?: string;
+  service_data?: Record<string, unknown>;
+  entity?: string;
+}
+
+export interface VisibilityCondition {
+  entity: string;
+  state?: string;
+  state_not?: string;
 }
 
 export interface PaddingConfig {
@@ -102,6 +125,7 @@ export interface Config {
   nav_name?: string;
   nav_items: NavItem[];
   custom_styles?: CustomStyles;
+  auto_active?: boolean;
 }
 
 export type NavItemProperty =
@@ -109,9 +133,11 @@ export type NavItemProperty =
   | "icon"
   | "destination"
   | "active"
-  | "unfolded";
+  | "unfolded"
+  | "icon_color"
+  | "entity";
 
-export type SubNavItemProperty = "name" | "icon" | "destination" | "active";
+export type SubNavItemProperty = "name" | "icon" | "destination" | "active" | "icon_color" | "entity";
 export type ColorType = "background" | "text" | "hover" | "active" | "active_text" | "icon";
 export type SubColorType = "main" | "sub";
 export type FontSizeType = "text" | "icon";

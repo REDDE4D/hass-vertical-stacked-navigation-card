@@ -1,6 +1,6 @@
 {
   "name": "hass-vertical-stacked-navigation-card",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Lovelace Vertical Stacked Navigation Card",
   "repository": "git@github.com:REDDE4D/hass-vertical-stacked-navigation-card.git",
   "author": "REDDE4D",
@@ -16,21 +16,21 @@
   ],
   "main": "dist/vertical-stacked-navigation-card.js",
   "devDependencies": {
+    "@rollup/plugin-commonjs": "^29.0.2",
+    "@rollup/plugin-node-resolve": "^16.0.3",
+    "@rollup/plugin-terser": "^1.0.0",
+    "@rollup/plugin-typescript": "^12.3.0",
     "custom-card-helpers": "^1.9.0",
     "hass-taste-test": "^0.2.1",
-    "jest": "^29.5.0",
-    "jest-image-snapshot": "^6.1.0",
-    "playwright": "^1.32.3"
+    "jest": "^29.7.0",
+    "jest-image-snapshot": "^6.4.0",
+    "playwright": "^1.52.0",
+    "rollup": "^4.59.0",
+    "typescript": "^5.9.3"
   },
   "dependencies": {
-    "@rollup/plugin-commonjs": "^28.0.1",
-    "@rollup/plugin-node-resolve": "^15.3.0",
-    "@rollup/plugin-terser": "^0.4.4",
-    "@rollup/plugin-typescript": "^12.1.1",
-    "lit": "^3.2.1",
-    "rollup": "^4.28.1",
-    "tslib": "^2.8.1",
-    "typescript": "^5.7.2"
+    "lit": "^3.3.2",
+    "tslib": "^2.8.1"
   },
   "scripts": {
     "build": "rollup -c",

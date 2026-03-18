@@ -4,11 +4,12 @@ import {
   TemplateResult,
   PropertyValues,
   CSSResultGroup,
+  nothing,
 } from "lit";
-import { property } from "lit/decorators.js";
+import { property, state } from "lit/decorators.js";
 import { HomeAssistant } from "custom-card-helpers";
 import { styles } from "./styles";
-import { Config } from "./types";
+import { Config, NavItem, SubNavItem, TapAction, VisibilityCondition } from "./types";
 import "./editor";
 
 export class VerticalStackedNavCard extends LitElement {
@@ -17,6 +18,7 @@ export class VerticalStackedNavCard extends LitElement {
   private content: HTMLElement | null = null;
   private isContentSet: boolean = false;
   private config!: Config;
+  @state() private _expandedItems: Set<number> = new Set();
 
   static get styles(): CSSResultGroup {
     return styles;
@@ -29,6 +31,7 @@ export class VerticalStackedNavCard extends LitElement {
   static getStubConfig() {
     return {
       nav_name: "Navigation",
+      auto_active: true,
       nav_items: [
         {
           name: "Home",
@@ -50,48 +53,135 @@ export class VerticalStackedNavCard extends LitElement {
     };
   }
 
+  private _isItemActive(item: NavItem | SubNavItem): boolean {
+    if (item.active) return true;
+    if (this.config.auto_active && item.destination) {
+      const currentPath = window.location.pathname;
+      return currentPath === item.destination;
+    }
+    return false;
+  }
+
+  private _isItemVisible(item: NavItem | SubNavItem): boolean {
+    if (!item.visibility || !this.hass) return true;
+    const { entity, state: requiredState, state_not } = item.visibility;
+    if (!entity) return true;
+    const entityState = this.hass.states[entity];
+    if (!entityState) return true;
+    if (requiredState !== undefined) return entityState.state === requiredState;
+    if (state_not !== undefined) return entityState.state !== state_not;
+    return true;
+  }
+
+  private _getEntityBadge(item: NavItem | SubNavItem): string | null {
+    if (!item.entity || !this.hass) return null;
+    const entityState = this.hass.states[item.entity];
+    if (!entityState) return null;
+    return entityState.state;
+  }
+
+  private _handleTapAction(item: NavItem | SubNavItem, event: MouseEvent): void {
+    if (!item.tap_action || item.tap_action.action === "navigate") return;
+    event.preventDefault();
+
+    const action = item.tap_action;
+    switch (action.action) {
+      case "url":
+        if (action.url_path) window.open(action.url_path, "_blank");
+        break;
+      case "call-service":
+        if (action.service && this.hass) {
+          const [domain, service] = action.service.split(".");
+          this.hass.callService(domain, service, action.service_data || {});
+        }
+        break;
+      case "more-info":
+        if (action.entity || item.entity) {
+          const moreInfoEvent = new CustomEvent("hass-more-info", {
+            bubbles: true,
+            composed: true,
+            detail: { entityId: action.entity || item.entity },
+          });
+          this.dispatchEvent(moreInfoEvent);
+        }
+        break;
+      case "none":
+        break;
+    }
+  }
+
+  private _getItemHref(item: NavItem | SubNavItem): string {
+    if (item.tap_action) {
+      switch (item.tap_action.action) {
+        case "navigate":
+          return item.tap_action.navigation_path || item.destination || "#";
+        case "url":
+        case "call-service":
+        case "more-info":
+        case "none":
+          return "#";
+      }
+    }
+    return item.destination || "#";
+  }
+
   protected render(): TemplateResult {
     const navItems = this.config.nav_items.map((item, index) => {
-      const isActive = item.active ? "active" : "";
-      const subNavItems = item.sub_nav_items
-        ? item.sub_nav_items.map(
-            (subItem) => html`
-              <a
-                href="${subItem.destination}"
-                class="sub-item ${subItem.active
-                  ? "active"
-                  : ""} nav-item-${index}"
-              >
-                <ha-icon icon="${subItem.icon}"></ha-icon>
-                <span>${subItem.name}</span>
-              </a>
-            `
-          )
-        : "";
+      if (!this._isItemVisible(item)) return nothing;
+
+      const isActive = this._isItemActive(item);
+      const hasSubNav = item.sub_nav_items && item.sub_nav_items.length > 0;
+      const isExpanded = this._expandedItems.has(index);
+      const badge = this._getEntityBadge(item);
+
+      const visibleSubItems = hasSubNav
+        ? item.sub_nav_items!.filter((sub) => this._isItemVisible(sub))
+        : [];
+
+      const subNavItems = visibleSubItems.map(
+        (subItem) => html`
+          <a
+            href="${this._getItemHref(subItem)}"
+            class="sub-item ${this._isItemActive(subItem) ? "active" : ""}"
+            @click=${(e: MouseEvent) => this._handleTapAction(subItem, e)}
+            style="${subItem.icon_color ? `--item-icon-color: ${subItem.icon_color}` : ""}"
+          >
+            <ha-icon icon="${subItem.icon}"></ha-icon>
+            <span>${subItem.name}</span>
+            ${subItem.entity && this._getEntityBadge(subItem)
+              ? html`<span class="badge">${this._getEntityBadge(subItem)}</span>`
+              : ""}
+          </a>
+        `
+      );
+
       return html`
         <div class="nav-item-container">
           <a
-            href="${item.sub_nav_items ? "#" : item.destination}"
-            class="nav-item ${isActive} ${item.unfolded
-              ? "unfolded"
-              : ""} nav-item-${index}"
-            @click=${item.sub_nav_items ? this._toggleSubnav : null}
+            href="${hasSubNav ? "#" : this._getItemHref(item)}"
+            class="nav-item ${isActive ? "active" : ""} ${isExpanded ? "unfolded" : ""}"
+            @click=${hasSubNav
+              ? (e: MouseEvent) => this._toggleSubnav(e, index)
+              : (e: MouseEvent) => this._handleTapAction(item, e)}
+            style="${item.icon_color ? `--item-icon-color: ${item.icon_color}` : ""}"
           >
             <ha-icon icon="${item.icon}"></ha-icon>
             <span>${item.name}</span>
-            ${item.sub_nav_items
+            ${badge
+              ? html`<span class="badge">${badge}</span>`
+              : ""}
+            ${hasSubNav
               ? html`<ha-icon
                   icon="mdi:chevron-down"
                   class="subnav-indicator"
                 ></ha-icon>`
               : ""}
           </a>
-          <div
-            class="sub-nav-items"
-            style="display: ${item.unfolded ? "block" : "none"}"
-          >
-            ${subNavItems}
-          </div>
+          ${hasSubNav
+            ? html`<div class="sub-nav-items ${isExpanded ? "expanded" : ""}">
+                ${subNavItems}
+              </div>`
+            : ""}
         </div>
       `;
     });
@@ -262,6 +352,15 @@ export class VerticalStackedNavCard extends LitElement {
     }
     this.config = config;
     this.isContentSet = false;
+
+    // Initialize expanded items from unfolded config
+    this._expandedItems = new Set();
+    config.nav_items.forEach((item, index) => {
+      if (item.unfolded) {
+        this._expandedItems.add(index);
+      }
+    });
+
     this.requestUpdate();
   }
 
@@ -269,31 +368,15 @@ export class VerticalStackedNavCard extends LitElement {
     return this.config.nav_items.length * 1;
   }
 
-  private _toggleSubnav(event: MouseEvent): void {
+  private _toggleSubnav(event: MouseEvent, index: number): void {
     event.preventDefault();
-    const navItemContainer = (event.target as HTMLElement).closest(
-      ".nav-item-container"
-    );
-    if (
-      !navItemContainer ||
-      !navItemContainer.querySelector(".sub-nav-items")
-    ) {
-      return;
-    }
-
-    const subNav = navItemContainer.querySelector(
-      ".sub-nav-items"
-    )! as HTMLElement;
-    const parentItem = navItemContainer.querySelector(
-      ".nav-item"
-    )! as HTMLElement;
-    if (subNav.style.display === "block") {
-      subNav.style.display = "none";
-      parentItem.classList.remove("unfolded");
+    const newSet = new Set(this._expandedItems);
+    if (newSet.has(index)) {
+      newSet.delete(index);
     } else {
-      subNav.style.display = "block";
-      parentItem.classList.add("unfolded");
+      newSet.add(index);
     }
+    this._expandedItems = newSet;
   }
 }
 

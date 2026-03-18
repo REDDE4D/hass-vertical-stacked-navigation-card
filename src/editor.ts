@@ -59,6 +59,15 @@ export class VerticalStackedNavCardEditor extends helpersMixin(LitElement) {
           @change="${this.navNameChanged}"
         ></ha-textfield>
         <div class="help-text">Set to "none" to hide the header</div>
+        <ha-formfield>
+          <ha-switch
+            type="checkbox"
+            ?checked=${this._config.auto_active !== false}
+            @change="${this.autoActiveChanged}"
+          ></ha-switch>
+          <label class="mdc-label">Auto-detect active page from URL</label>
+        </ha-formfield>
+        <div class="help-text">Automatically highlights the nav item matching the current URL path</div>
       </div>
     `;
   }
@@ -109,6 +118,22 @@ export class VerticalStackedNavCardEditor extends helpersMixin(LitElement) {
                         this.navItemChanged(ev, index, "destination")}"
                     ></destination-input>
                   </div>
+                  <div class="main-config-row">
+                    <ha-textfield
+                      label="Icon Color"
+                      placeholder="var(--primary-color)"
+                      .value="${navItem.icon_color || ""}"
+                      @change="${(ev: CustomEvent) =>
+                        this.navItemChanged(ev, index, "icon_color")}"
+                    ></ha-textfield>
+                    <ha-textfield
+                      label="Entity (for badge)"
+                      placeholder="sensor.temperature"
+                      .value="${navItem.entity || ""}"
+                      @change="${(ev: CustomEvent) =>
+                        this.navItemChanged(ev, index, "entity")}"
+                    ></ha-textfield>
+                  </div>
                 </div>
                 <div class="nav-item-options">
                   <ha-formfield>
@@ -146,12 +171,103 @@ export class VerticalStackedNavCardEditor extends helpersMixin(LitElement) {
                     <ha-icon .icon=${"mdi:delete"}></ha-icon>
                   </mwc-button>
                 </div>
+                ${this.renderVisibilityConfig(index)}
+                ${this.renderTapActionConfig(index)}
                 ${this.renderSubNavItems(navItem, index)}
               </div>
             `;
           })}
         </div>
       </div>
+    `;
+  }
+
+  private renderVisibilityConfig(index: number) {
+    const navItem = this._config.nav_items[index];
+    return html`
+      <details>
+        <summary>Visibility Condition</summary>
+        <div class="visibility-config">
+          <ha-textfield
+            label="Entity"
+            placeholder="binary_sensor.guest_mode"
+            .value="${navItem.visibility?.entity || ""}"
+            @change="${(ev: InputEvent) =>
+              this.navItemVisibilityChanged(ev, index, "entity")}"
+          ></ha-textfield>
+          <div class="main-config-row">
+            <ha-textfield
+              label="Required State"
+              placeholder="on"
+              .value="${navItem.visibility?.state || ""}"
+              @change="${(ev: InputEvent) =>
+                this.navItemVisibilityChanged(ev, index, "state")}"
+            ></ha-textfield>
+            <ha-textfield
+              label="State Not"
+              placeholder="off"
+              .value="${navItem.visibility?.state_not || ""}"
+              @change="${(ev: InputEvent) =>
+                this.navItemVisibilityChanged(ev, index, "state_not")}"
+            ></ha-textfield>
+          </div>
+          <div class="help-text">Show this item only when entity matches condition</div>
+        </div>
+      </details>
+    `;
+  }
+
+  private renderTapActionConfig(index: number) {
+    const navItem = this._config.nav_items[index];
+    const action = navItem.tap_action?.action || "navigate";
+
+    return html`
+      <details>
+        <summary>Tap Action</summary>
+        <div class="tap-action-config">
+          <ha-textfield
+            label="Action"
+            placeholder="navigate"
+            .value="${action}"
+            @change="${(ev: InputEvent) =>
+              this.navItemTapActionChanged(ev, index, "action")}"
+          ></ha-textfield>
+          <div class="help-text">Options: navigate, url, call-service, more-info, none</div>
+          ${action === "url"
+            ? html`
+                <ha-textfield
+                  label="URL"
+                  placeholder="https://example.com"
+                  .value="${navItem.tap_action?.url_path || ""}"
+                  @change="${(ev: InputEvent) =>
+                    this.navItemTapActionChanged(ev, index, "url_path")}"
+                ></ha-textfield>
+              `
+            : ""}
+          ${action === "call-service"
+            ? html`
+                <ha-textfield
+                  label="Service"
+                  placeholder="light.toggle"
+                  .value="${navItem.tap_action?.service || ""}"
+                  @change="${(ev: InputEvent) =>
+                    this.navItemTapActionChanged(ev, index, "service")}"
+                ></ha-textfield>
+              `
+            : ""}
+          ${action === "more-info"
+            ? html`
+                <ha-textfield
+                  label="Entity"
+                  placeholder="light.living_room"
+                  .value="${navItem.tap_action?.entity || ""}"
+                  @change="${(ev: InputEvent) =>
+                    this.navItemTapActionChanged(ev, index, "entity")}"
+                ></ha-textfield>
+              `
+            : ""}
+        </div>
+      </details>
     `;
   }
 
@@ -202,6 +318,22 @@ export class VerticalStackedNavCardEditor extends helpersMixin(LitElement) {
                         )}"
                     ></destination-input>
                   </div>
+                  <div class="main-config-row">
+                    <ha-textfield
+                      label="Icon Color"
+                      placeholder="var(--primary-color)"
+                      .value="${subNavItem.icon_color || ""}"
+                      @change="${(ev: CustomEvent) =>
+                        this.subNavItemChanged(ev, index, subNavItemIndex, "icon_color")}"
+                    ></ha-textfield>
+                    <ha-textfield
+                      label="Entity (for badge)"
+                      placeholder="sensor.temperature"
+                      .value="${subNavItem.entity || ""}"
+                      @change="${(ev: CustomEvent) =>
+                        this.subNavItemChanged(ev, index, subNavItemIndex, "entity")}"
+                    ></ha-textfield>
+                  </div>
                 </div>
                 <div class="sub-nav-item-options">
                   <ha-formfield>
@@ -221,6 +353,34 @@ export class VerticalStackedNavCardEditor extends helpersMixin(LitElement) {
                     <ha-icon .icon=${"mdi:delete"}></ha-icon>
                   </mwc-button>
                 </div>
+                <details>
+                  <summary>Visibility Condition</summary>
+                  <div class="visibility-config">
+                    <ha-textfield
+                      label="Entity"
+                      placeholder="binary_sensor.guest_mode"
+                      .value="${subNavItem.visibility?.entity || ""}"
+                      @change="${(ev: InputEvent) =>
+                        this.subNavItemVisibilityChanged(ev, index, subNavItemIndex, "entity")}"
+                    ></ha-textfield>
+                    <div class="main-config-row">
+                      <ha-textfield
+                        label="Required State"
+                        placeholder="on"
+                        .value="${subNavItem.visibility?.state || ""}"
+                        @change="${(ev: InputEvent) =>
+                          this.subNavItemVisibilityChanged(ev, index, subNavItemIndex, "state")}"
+                      ></ha-textfield>
+                      <ha-textfield
+                        label="State Not"
+                        placeholder="off"
+                        .value="${subNavItem.visibility?.state_not || ""}"
+                        @change="${(ev: InputEvent) =>
+                          this.subNavItemVisibilityChanged(ev, index, subNavItemIndex, "state_not")}"
+                      ></ha-textfield>
+                    </div>
+                  </div>
+                </details>
               </div>
             `;
           })}
